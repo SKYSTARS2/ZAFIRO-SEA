@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم الرحلات المتطورة | ZAFIRO SEA</title>
+    
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-deep: #02070e;
+            --card-bg: rgba(6, 18, 32, 0.85);
+            --gold-primary: #d4af37;
+            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+            --glass-border: rgba(212, 175, 55, 0.25);
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --danger: #ff453a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            transition: all 0.25s ease;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Top Header */
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            padding: 25px 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .admin-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--gold-primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 12px 22px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-gold {
+            background: var(--gold-gradient);
+            color: #02070e;
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn-reset {
+            background: rgba(255, 69, 58, 0.15);
+            color: var(--danger);
+            border: 1px solid rgba(255, 69, 58, 0.3);
+        }
+
+        .btn-reset:hover {
+            background: rgba(255, 69, 58, 0.25);
+        }
+
+        /* Table Design */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .trips-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 12px;
+        }
+
+        .trips-table th {
+            padding: 14px 20px;
+            color: var(--text-sub);
+            font-size: 14px;
+            text-align: right;
+        }
+
+        .trips-tr {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+        }
+
+        .trips-td {
+            padding: 16px 20px;
+            font-size: 15px;
+            border-top: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .trips-td:first-child {
+            border-right: 1px solid var(--glass-border);
+            border-top-right-radius: 16px;
+            border-bottom-right-radius: 16px;
+        }
+
+        .trips-td:last-child {
+            border-left: 1px solid var(--glass-border);
+            border-top-left-radius: 16px;
+            border-bottom-left-radius: 16px;
+        }
+
+        .thumb-img {
+            width: 60px;
+            height: 48px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-sm-edit {
+            background: rgba(212, 175, 55, 0.15);
+            color: var(--gold-primary);
+            border: 1px solid var(--glass-border);
+            padding: 7px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            margin-left: 6px;
+        }
+
+        .btn-sm-delete {
+            background: rgba(255, 69, 58, 0.15);
+            color: var(--danger);
+            border: 1px solid rgba(255, 69, 58, 0.3);
+            padding: 7px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        /* Modal Popup */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(2, 7, 14, 0.92);
+            backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal-content {
+            background: #06121e;
+            width: 100%;
+            max-width: 800px;
+            max-height: 90vh;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            overflow-y: auto;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 15px;
+        }
+
+        .modal-header h3 { color: var(--gold-primary); font-size: 20px; }
+        .close-btn { background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group-full { grid-column: span 2; }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--gold-primary);
+            margin-bottom: 6px;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+            color: #fff;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .form-group select option { background: #06121e; color: #fff; }
+
+        /* Multi-Image Upload Box */
+        .upload-box {
+            border: 2px dashed var(--glass-border);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .upload-box:hover { border-color: var(--gold-primary); background: rgba(212, 175, 55, 0.05); }
+
+        .preview-grid {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .preview-item {
+            position: relative;
+            width: 75px;
+            height: 60px;
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1.5px solid var(--gold-primary);
+        }
+
+        .preview-item .remove-img-btn {
+            position: absolute;
+            top: -6px;
+            left: -6px;
+            background: var(--danger);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 11px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="admin-container">
+        <!-- Header -->
+        <div class="admin-header">
+            <div class="admin-title">
+                <i class="fa-solid fa-sliders"></i> لوحة تحكم رحلات ZAFIRO SEA (متعددة الصور)
+            </div>
+            <div class="admin-actions">
+                <button class="btn btn-gold" onclick="openAddModal()">
+                    <i class="fa-solid fa-plus"></i> إضافة رحلة جديدة
+                </button>
+                <button class="btn btn-reset" onclick="resetDefaultData()">
+                    <i class="fa-solid fa-rotate-left"></i> استرجاع الافتراضي
+                </button>
+            </div>
+        </div>
+
+        <!-- Trips Table -->
+        <div class="table-responsive">
+            <table class="trips-table">
+                <thead>
+                    <tr>
+                        <th>الصور</th>
+                        <th>اسم الرحلة (عربي)</th>
+                        <th>القسم</th>
+                        <th>السعر (€)</th>
+                        <th>التحكم</th>
+                    </tr>
+                </thead>
+                <tbody id="tripsTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal Form -->
+    <div class="modal-overlay" id="tripModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">إضافة / تعديل رحلة</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+
+            <form id="tripForm" onsubmit="saveTrip(event)">
+                <input type="hidden" id="editKey">
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>كود الرحلة (Unique Key)</label>
+                        <input type="text" id="tripKeyInput" required placeholder="e.g. orange-bay">
+                    </div>
+
+                    <div class="form-group">
+                        <label>قسم الرحلة</label>
+                        <select id="tripCategory">
+                            <option value="islands">رحلات الجزر (Islands)</option>
+                            <option value="speedboat">السبيد بوت (Speedboat)</option>
+                            <option value="diving">الغوص والسنوركل (Diving)</option>
+                            <option value="safari">سفاري الصحراء (Safari)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group form-group-full">
+                        <label>السعر الأساسي باليورو (€)</label>
+                        <input type="number" id="tripPrice" required placeholder="25">
+                    </div>
+
+                    <!-- Multi-Image Upload -->
+                    <div class="form-group form-group-full">
+                        <label>صور الرحلة (يمكنك اختيار عدة صور من جهازك دفعة واحدة)</label>
+                        <div class="upload-box" onclick="document.getElementById('multiFileInput').click()">
+                            <i class="fa-solid fa-images" style="font-size:28px; color:var(--gold-primary); margin-bottom:6px;"></i>
+                            <p style="font-size:13px; color:#fff;">اضغط لاختيار صور متعددة من جهازك (PC أو موبايل)</p>
+                            <input type="file" id="multiFileInput" accept="image/*" multiple style="display:none;" onchange="handleMultipleImages(event)">
+                        </div>
+                        <div style="margin-top:10px;">
+                            <input type="text" id="externalUrlInput" placeholder="أو أضف رابط صورة خارجي واضغط إضافة" style="width:78%; display:inline-block;">
+                            <button type="button" class="btn btn-gold" style="width:20%; display:inline-block; padding:11px;" onclick="addExternalUrlImage()">إضافة رابط</button>
+                        </div>
+                        <div class="preview-grid" id="previewContainer"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>اسم الرحلة (بالعربية)</label>
+                        <input type="text" id="titleAr" required placeholder="رحلة جزيرة أورانج باي">
+                    </div>
+
+                    <div class="form-group">
+                        <label>اسم الرحلة (بالإنجليزي)</label>
+                        <input type="text" id="titleEn" required placeholder="Orange Bay Island">
+                    </div>
+
+                    <div class="form-group form-group-full">
+                        <label>وصف الرحلة (عربي)</label>
+                        <textarea id="descAr" rows="2" required placeholder="وصف الرحلة بالعربي..."></textarea>
+                    </div>
+
+                    <div class="form-group form-group-full">
+                        <label>وصف الرحلة (إنجليزي)</label>
+                        <textarea id="descEn" rows="2" required placeholder="English description..."></textarea>
+                    </div>
+
+                    <div class="form-group form-group-full">
+                        <label>مميزات الرحلة (عربي - افصل بين المميزات بـ فاصلة ,)</label>
+                        <input type="text" id="highlightsAr" placeholder="انتقالات الفندق, مشروبات مجانية, ساعتان بالشاطئ">
+                    </div>
+
+                    <div class="form-group form-group-full">
+                        <label>مميزات الرحلة (إنجليزي - افصل بين المميزات بـ فاصلة ,)</label>
+                        <input type="text" id="highlightsEn" placeholder="Hotel pickup, Free drinks, 2 Hours on beach">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-gold" style="width: 100%; margin-top: 20px; justify-content: center;">
+                    <i class="fa-solid fa-floppy-disk"></i> حفظ بيانات الرحلة
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'zafiro_trips_db';
+
+        const defaultData = {
+            'orange-bay': {
+                category: 'islands', priceEUR: 20, 
+                images: ['https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200', 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1200'],
+                en: { title: 'Orange Bay Island Escape', desc: 'Experience the Egyptian Caribbean!', highlights: ['VIP Pick-up', '2 Hours Stay'] },
+                ar: { title: 'رحلة جزيرة أورانج باي', desc: 'استمتع بكاريمي مصر مع أراجيح المياه الشهيرة والرمال الناعمة.', highlights: ['انتقالات VIP', 'ساعتان استراحة على الشاطئ'] }
+            },
+            'daily-diving': {
+                category: 'diving', priceEUR: 50, 
+                images: ['https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1200'],
+                en: { title: 'Certified Daily Diving', desc: 'Professional 2-Dive trip for certified divers.', highlights: ['Hotel transfer', '2 Certified Dives'] },
+                ar: { title: 'رحلة الغوص اليومي للمحترفين', desc: 'رحلة غطستين كاملتين للغواصين الحاصلين على شهادات غوص.', highlights: ['توصيل الفندق', 'غطستان احترافيتان'] }
+            }
+        };
+
+        let currentTripImages = [];
+
+        function getData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            return saved ? JSON.parse(saved) : defaultData;
+        }
+
+        function saveData(data) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            renderTable();
+        }
+
+        function renderTable() {
+            const trips = getData();
+            const tbody = document.getElementById('tripsTableBody');
+            tbody.innerHTML = '';
+
+            for (const [key, trip] of Object.entries(trips)) {
+                const titleAr = trip.ar ? trip.ar.title : key;
+                const firstImg = (trip.images && trip.images.length > 0) ? trip.images[0] : '';
+                const imgCount = trip.images ? trip.images.length : 0;
+
+                tbody.innerHTML += `
+                    <tr class="trips-tr">
+                        <td class="trips-td">
+                            <div style="display:flex; align-items:center; gap:6px;">
+                                <img src="${firstImg}" class="thumb-img">
+                                <span style="font-size:12px; background:rgba(212,175,55,0.1); padding:2px 6px; border-radius:6px; color:var(--gold-primary); font-weight:700;">+${imgCount}</span>
+                            </div>
+                        </td>
+                        <td class="trips-td"><strong>${titleAr}</strong><br><small style="color:var(--text-sub);">${key}</small></td>
+                        <td class="trips-td">${trip.category}</td>
+                        <td class="trips-td" style="color:var(--gold-primary); font-weight:800;">€${trip.priceEUR}</td>
+                        <td class="trips-td">
+                            <button class="btn-sm-edit" onclick="openEditModal('${key}')"><i class="fa-solid fa-pen"></i> تعديل</button>
+                            <button class="btn-sm-delete" onclick="deleteTrip('${key}')"><i class="fa-solid fa-trash"></i> حذف</button>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        function handleMultipleImages(e) {
+            const files = e.target.files;
+            if (!files || files.length === 0) return;
+
+            for (let i = 0; i < files.length; i++) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    currentTripImages.push(evt.target.result);
+                    renderImagePreviews();
+                };
+                reader.readAsDataURL(files[i]);
+            }
+        }
+
+        function addExternalUrlImage() {
+            const urlInput = document.getElementById('externalUrlInput');
+            const url = urlInput.value.trim();
+            if(!url) return alert('أدخل رابط الصورة أولاً!');
+            currentTripImages.push(url);
+            urlInput.value = '';
+            renderImagePreviews();
+        }
+
+        function removeImage(index) {
+            currentTripImages.splice(index, 1);
+            renderImagePreviews();
+        }
+
+        function renderImagePreviews() {
+            const container = document.getElementById('previewContainer');
+            container.innerHTML = '';
+            currentTripImages.forEach((imgSrc, index) => {
+                container.innerHTML += `
+                    <div class="preview-item">
+                        <img src="${imgSrc}">
+                        <button type="button" class="remove-img-btn" onclick="removeImage(${index})">&times;</button>
+                    </div>
+                `;
+            });
+        }
+
+        function openAddModal() {
+            document.getElementById('modalTitle').innerText = "إضافة رحلة جديدة";
+            document.getElementById('tripForm').reset();
+            document.getElementById('editKey').value = "";
+            document.getElementById('tripKeyInput').readOnly = false;
+            currentTripImages = [];
+            renderImagePreviews();
+            document.getElementById('tripModal').classList.add('active');
+        }
+
+        function openEditModal(key) {
+            const trips = getData();
+            const trip = trips[key];
+            if (!trip) return;
+
+            document.getElementById('modalTitle').innerText = `تعديل رحلة: ${key}`;
+            document.getElementById('editKey').value = key;
+            document.getElementById('tripKeyInput').value = key;
+            document.getElementById('tripKeyInput').readOnly = true;
+
+            document.getElementById('tripCategory').value = trip.category;
+            document.getElementById('tripPrice').value = trip.priceEUR;
+
+            document.getElementById('titleAr').value = trip.ar ? trip.ar.title : '';
+            document.getElementById('titleEn').value = trip.en ? trip.en.title : '';
+            document.getElementById('descAr').value = trip.ar ? trip.ar.desc : '';
+            document.getElementById('descEn').value = trip.en ? trip.en.desc : '';
+
+            document.getElementById('highlightsAr').value = trip.ar && trip.ar.highlights ? trip.ar.highlights.join(', ') : '';
+            document.getElementById('highlightsEn').value = trip.en && trip.en.highlights ? trip.en.highlights.join(', ') : '';
+
+            currentTripImages = trip.images ? [...trip.images] : [];
+            renderImagePreviews();
+
+            document.getElementById('tripModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('tripModal').classList.remove('active');
+        }
+
+        function saveTrip(e) {
+            e.preventDefault();
+            if (currentTripImages.length === 0) {
+                return alert('يجب إضافة صورة واحدة على الأقل للرحلة!');
+            }
+
+            const trips = getData();
+            const editKey = document.getElementById('editKey').value;
+            const keyInput = document.getElementById('tripKeyInput').value.trim().toLowerCase().replace(/\s+/g, '-');
+
+            const key = editKey || keyInput;
+            const hlAr = document.getElementById('highlightsAr').value.split(',').map(s => s.trim()).filter(Boolean);
+            const hlEn = document.getElementById('highlightsEn').value.split(',').map(s => s.trim()).filter(Boolean);
+
+            trips[key] = {
+                category: document.getElementById('tripCategory').value,
+                priceEUR: parseFloat(document.getElementById('tripPrice').value) || 0,
+                images: [...currentTripImages],
+                ar: {
+                    title: document.getElementById('titleAr').value,
+                    desc: document.getElementById('descAr').value,
+                    highlights: hlAr
+                },
+                en: {
+                    title: document.getElementById('titleEn').value,
+                    desc: document.getElementById('descEn').value,
+                    highlights: hlEn
+                }
+            };
+
+            saveData(trips);
+            closeModal();
+            alert('تم حفظ الرحلة وصورها بنجاح!');
+        }
+
+        function deleteTrip(key) {
+            if (confirm(`هل أنت محيط برغبتك في حذف الرحلة (${key})؟`)) {
+                const trips = getData();
+                delete trips[key];
+                saveData(trips);
+            }
+        }
+
+        function resetDefaultData() {
+            if (confirm('هل تريد إعادة ضبط البيانات للافتراضي؟')) {
+                saveData(defaultData);
+            }
+        }
+
+        window.onload = renderTable;
+    </script>
+</body>
+</html>
