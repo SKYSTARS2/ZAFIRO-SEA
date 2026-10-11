@@ -1489,6 +1489,7 @@
             if(e.key === 'Enter') sendAIMessage();
         }
 
+        /* SMART ADVANCED CONCERNED AI CONCIERGE (ACTS LIKE YOU, GUIDES CLIENTS, & ESCALATES TO WHATSAPP) */
         function sendAIMessage() {
             const input = document.getElementById('aiInput');
             const text = input.value.trim();
@@ -1502,62 +1503,84 @@
             setTimeout(() => {
                 const lower = text.toLowerCase();
                 let botReply = "";
-                let isBookingIntent = false;
+                let needsEscalation = false;
                 let tripQueryParam = text;
 
                 const isArabicText = /[\u0600-\u06FF]/.test(text);
 
-                if (lower === 'hello' || lower === 'hi' || lower === 'hey' || lower.includes('أهلا') || lower.includes('مرحبا') || lower.includes('السلام عليكم') || lower.includes('hallo')) {
+                // Greeting / Welcome intent
+                if (lower === 'hello' || lower === 'hi' || lower === 'hey' || lower.includes('أهلا') || lower.includes('مرحبا') || lower.includes('السلام عليكم') || lower.includes('hallo') || lower.includes('ciao')) {
                     if (isArabicText || currentLang === 'ar') {
-                        botReply = "أهلاً بك! كيف يمكنني مساعدتك اليوم؟ يمكنك الاستفسار عن رحلات البحر الأحمر، الغوص، الجزر، أو الأسعار.";
+                        botReply = "أهلاً بك يا فندم في ZAFIRO SEA! معك مساعدك الشخصي. أنا هنا لمساعدتك في اختيار أفضل رحلة بحرية أو سفاري في الغردقة. هل تبحث عن استرخاء وجزر (مثل أورانج باي)، أم مغامرة غوص، أو سبيد بوت خاص؟";
                     } else if (currentLang === 'de') {
-                        botReply = "Hallo! Wie kann ich Ihnen heute helfen? Sie können nach unseren Ausflügen, Preisen oder Inseltouren fragen.";
+                        botReply = "Hallo und willkommen bei ZAFIRO SEA! Ich bin Ihr persönlicher Concierge. Suchen Sie nach Inselausflügen, Tauchen oder einem privaten Schnellboot?";
                     } else if (currentLang === 'it') {
-                        botReply = "Ciao! Come posso aiutarti oggi? Puoi chiedere informazioni sulle nostre escursioni, immersioni o prezzi.";
+                        botReply = "Ciao e benvenuto a ZAFIRO SEA! Sono il tuo assistente personale. Stai cercando escursioni alle isole, immersioni o un motoscafo privato?";
                     } else if (currentLang === 'ru') {
-                        botReply = "Здравствуйте! Чем я могу вам помочь сегодня? Вы можете спросить о наших экскурсиях, островах и ценах.";
+                        botReply = "Здравствуйте! Добро пожаловать в ZAFIRO SEA. Я ваш личный помощник. Вас интересуют острова, дайвинг или частный катер?";
                     } else {
-                        botReply = "Hello! How can I assist you today? Feel free to ask about our Red Sea excursions, island tours, diving, or prices.";
+                        botReply = "Hello and welcome to ZAFIRO SEA! I am your personal concierge assistant. Are you looking for a relaxing island tour (like Orange Bay), an exciting diving trip, or a private speedboat?";
                     }
                 } 
-                else if (lower.includes('price') || lower.includes('cost') || lower.includes('سعر') || lower.includes('بكام') || lower.includes('اسعار')) {
+                // Price / Cost intent
+                else if (lower.includes('price') || lower.includes('cost') || lower.includes('سعر') || lower.includes('بكام') || lower.includes('اسعار') || lower.includes('kosten')) {
                     if (isArabicText || currentLang === 'ar') {
-                        botReply = "أسعار رحلاتنا تبدأ من 15€ وتختلف حسب نوع الرحلة (أورانج باي، غوص، سبيد بوت، سفاري). هل تبحث عن رحلة فردية أم عائلية؟";
+                        botReply = "أسعارنا تنافسية للغاية وتبدأ من 15 يورو فقط للرحلات الجماعية (مثل رحلات الغواصة)، ورحلات الجزر المميزة مثل أورانج باي تبدأ من 20 يورو، والسبيد بوت الخاص يبدأ من 150 يورو. تحب أعرض عليك تفاصيل رحلة معينة بالأسعار؟";
                     } else {
-                        botReply = "Our excursion prices start from €15 depending on the trip (Orange Bay, Diving, Speedboat, Safari). Are you looking for a family trip or private charter?";
+                        botReply = "Our prices start from €15 for submarine trips, island escapes like Orange Bay from €20, and private speedboats from €150. Would you like me to guide you through a specific trip's program and pricing?";
                     }
                 } 
-                else if (lower.includes('book') || lower.includes('reserve') || lower.includes('احجز') || lower.includes('حجز') || lower.includes('أورانج') || lower.includes('orange') || lower.includes('speed') || lower.includes('سبيد')) {
-                    isBookingIntent = true;
-                    if (lower.includes('orange') || lower.includes('أورانج')) tripQueryParam = "Orange Bay Island Escape";
-                    if (lower.includes('speed') || lower.includes('سبيد')) tripQueryParam = "Private Speedboat Tour";
-
+                // Specific trip matching & guiding
+                else if (lower.includes('orange') || lower.includes('أورانج') || lower.includes('bay')) {
+                    tripQueryParam = "Orange Bay Island Escape";
                     if (isArabicText || currentLang === 'ar') {
-                        botReply = "يسعدنا جداً ترتيب رحلتك! يمكنك تأكيد الحجز مباشرة مع فريقنا عبر الواتساب:";
+                        botReply = "رحلة **جزيرة أورانج باي** هي اختيار رائع جداً وتعتبر من أهم ترشيحاتنا! السعر 20 يورو فقط للفرد، وتشمل الانتقالات من الفندق، ساعتين على الشاطئ الساحر، أراجيح المياه الشهيرة، وبوفيه غداء مفتوح مع المشروبات. هل أحجزها لك أو تود تفاصيل أكثر؟";
                     } else {
-                        botReply = "We would love to arrange your excursion! You can easily confirm your booking and details with us via WhatsApp:";
+                        botReply = "The **Orange Bay Island Escape** is an absolute guest favorite at €20! It includes hotel transfers, 2 hours on the pristine beach, iconic water swings, open buffet lunch, and drinks. Shall I connect you with our manager on WhatsApp to secure your dates?";
                     }
-                } 
+                    needsEscalation = true;
+                }
+                else if (lower.includes('speed') || lower.includes('سبيد') || lower.includes('بوت')) {
+                    tripQueryParam = "Private Speedboat Tour";
+                    if (isArabicText || currentLang === 'ar') {
+                        botReply = "ال **سبيد بوت الخاص** (4 ساعات بسعر 150 يورو) بيمنحك خصوصية مطلقة للوصول إلى بيت الدلافين والجزر العذراء بمواعيد انطلاق مرنة تماماً ومعاك قبطان محترف. هل ترغب في تأكيد حجز هذا السبيد بوت؟";
+                    } else {
+                        botReply = "Our **Private Speedboat (4 hours for €150)** gives you ultimate privacy to visit Dolphin House and virgin islands with a flexible schedule. Would you like to confirm this private tour via WhatsApp?";
+                    }
+                    needsEscalation = true;
+                }
+                else if (lower.includes('safari') || lower.includes('سفاري') || lower.includes('جبل') || lower.includes('quad')) {
+                    tripQueryParam = "Mountain Safari";
+                    if (isArabicText || currentLang === 'ar') {
+                        botReply = "رحلة **السفاري الجبلية** (بـ 30 يورو) تشمل قيادة البيتش باجي لمدة 45 دقيقة، سيارات السبايدر، زيارة القرية البدوية وركوب الجمال، بالإضافة إلى عشاء بوفيه مشويات بدوي وعرض شرقي ساحر. هل أحجزها لك؟";
+                    } else {
+                        botReply = "The **Mountain Safari (€30)** includes 45 mins quad biking, spider buggies, a Bedouin village visit, camel ride, and a delicious BBQ dinner with an Oriental show. Shall we book it?";
+                    }
+                    needsEscalation = true;
+                }
+                // When AI gets stuck / complex request -> Escalate to WhatsApp
                 else {
+                    needsEscalation = true;
                     if (isArabicText || currentLang === 'ar') {
-                        botReply = "شكراً لتواصلك! أنا هنا لمساعدتك في اختيار أفضل تجربة في البحر الأحمر بالغردقة. هل تود الاستفسار عن رحلة معينة؟";
+                        botReply = "طلبك مميز جداً ويستحق عناية خاصة لضمان أفضل ترتيب! نظراً لأنني مساعد ذكي، سأقوم بتحويلك مباشرة إلى مؤسس الشركة وخبراء الحجز لدينا على الواتساب لخدمتك بشكل فوري وشخصي:";
                     } else {
-                        botReply = "Thank you for reaching out! I'm here to help you find the best Red Sea experience in Hurghada. Which excursion are you interested in?";
+                        botReply = "That's a wonderful request! To give you the best personalized arrangement and VIP service, let me connect you directly with our senior booking manager on WhatsApp:";
                     }
                 }
 
                 let botMsgHtml = `<div class="chat-msg bot">${botReply}`;
                 
-                if (isBookingIntent) {
-                    const waUrl = `https://wa.me/${officialWhatsAppNumber}?text=${encodeURIComponent('مرحباً ZAFIRO SEA، أريد الاستفسار والحجز بخصوص: ' + tripQueryParam)}`;
-                    const btnLabel = (isArabicText || currentLang === 'ar') ? 'تواصل واحجز عبر الواتساب' : 'Book via WhatsApp Now';
-                    botMsgHtml += `<br><a href="${waUrl}" target="_blank" class="wa-chat-redirect-btn"><i class="fa-brands fa-whatsapp"></i> ${btnLabel}</a>`;
-                }
-
+                // Always provide the direct WhatsApp handover button when guiding towards booking or when handling complex inquiries
+                const waText = `مرحباً ZAFIRO SEA، أنا بصدد التحدث مع المساعد الآلي وأرغب في حجز والاستفسار عن: ${tripQueryParam} (رسالة من الزبون عبر الموقع)`;
+                const waUrl = `https://wa.me/${officialWhatsAppNumber}?text=${encodeURIComponent(waText)}`;
+                const btnLabel = (isArabicText || currentLang === 'ar') ? 'تحدث مباشرة مع المدير عبر الواتساب' : 'Chat Directly with Manager on WhatsApp';
+                
+                botMsgHtml += `<br><a href="${waUrl}" target="_blank" class="wa-chat-redirect-btn"><i class="fa-brands fa-whatsapp"></i> ${btnLabel}</a>`;
                 botMsgHtml += `</div>`;
+
                 body.innerHTML += botMsgHtml;
                 body.scrollTop = body.scrollHeight;
-            }, 500);
+            }, 600);
         }
 
         window.onload = function() {
