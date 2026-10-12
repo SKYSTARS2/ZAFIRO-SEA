@@ -757,16 +757,49 @@
     <!-- AOS JS Script -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 
+    <!-- استدعاء فايربيس في index.html -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, doc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  // إعدادات السحابة الجديدة zafiro-wep
+  const firebaseConfig = {
+    apiKey: "AIzaSyDvYQcPSFppf-1C8Z_f77vwa8YQNQvS8MY",
+    authDomain: "zafiro-wep.firebaseapp.com",
+    projectId: "zafiro-wep",
+    storageBucket: "zafiro-wep.firebasestorage.app",
+    messagingSenderId: "785883709300",
+    appId: "1:785883709300:web:a501bb87e0582966d73621",
+    measurementId: "G-HJ0MKBP9JG"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // تحديث الأسعار والبيانات تلقائياً بمجرد تغيّرها في السحابة
+  onSnapshot(collection(db, "trips"), (snapshot) => {
+    snapshot.forEach((doc) => {
+      const trip = doc.data();
+      const tripId = doc.id; // معرّف الرحلة
+
+      // البحث عن عنصر السعر الخاص بالرحلة في الصفحة وتحديثه
+      const priceElement = document.querySelector(`[data-trip-id="${tripId}"] .price-tag`);
+      if (priceElement && trip.price) {
+        priceElement.textContent = `$${trip.price}`;
+      }
+    });
+  });
+</script>
+
     <script>
-        // FIREBASE CLOUD INITIALIZATION WITH YOUR EXACT PROJECT CONFIG KEYS
-      const firebaseConfig = {
-  apiKey: "AIzaSyDvYQcPSFppf-1C8Z_f77vwa8YQNQvS8MY",
-  authDomain: "zafiro-wep.firebaseapp.com",
-  projectId: "zafiro-wep",
-  storageBucket: "zafiro-wep.firebasestorage.app",
-  messagingSenderId: "785883709300",
-  appId: "1:785883709300:web:a501bb87e0582966d73621",
-  measurementId: "G-HJ0MKBP9JG"
+        const firebaseConfig = {
+            apiKey: "AIzaSyDvYQcPSFppf-1C8Z_f77vwa8YQNQvS8MY",
+            authDomain: "zafiro-wep.firebaseapp.com",
+            projectId: "zafiro-wep",
+            storageBucket: "zafiro-wep.appspot.com",
+            messagingSenderId: "785883709300",
+            appId: "1:785883709300:web:a501bb87e0582966d73621",
+            measurementId: "G-HJ0MKBP9JG"
 };
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
