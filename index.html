@@ -163,18 +163,19 @@
             background: var(--card-bg); border-radius: 20px; overflow: hidden;
             border: 1px solid var(--glass-border); display: flex; flex-direction: column;
             box-shadow: 0 15px 35px rgba(0,0,0,0.6); backdrop-filter: blur(12px);
+            cursor: pointer;
         }
 
         .trip-card:hover { transform: translateY(-5px); border-color: var(--glass-border-hover); box-shadow: 0 20px 45px rgba(212, 175, 55, 0.2); }
 
-        .media-carousel { position: relative; width: 100%; height: 220px; background: #000; overflow: hidden; cursor: pointer; }
+        .media-carousel { position: relative; width: 100%; height: 220px; background: #000; overflow: hidden; }
         .carousel-track { display: flex; width: 100%; height: 100%; }
         .carousel-slide { min-width: 100%; height: 100%; }
         .carousel-slide img { width: 100%; height: 100%; object-fit: cover; }
 
         .trip-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; }
-        .trip-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 8px; cursor: pointer; }
-        .trip-title:hover { color: var(--gold-primary); }
+        .trip-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+        .trip-card:hover .trip-title { color: var(--gold-primary); }
         .trip-desc { font-size: 13.5px; color: var(--text-sub); line-height: 1.55; margin-bottom: 16px; }
 
         .trip-includes { list-style: none; margin-bottom: 20px; display: flex; flex-direction: column; gap: 8px; flex-grow: 1; }
@@ -190,6 +191,7 @@
         .book-btn {
             background: var(--gold-gradient); color: #02070e; padding: 10px 18px; border-radius: 10px;
             border: none; cursor: pointer; font-weight: 800; font-size: 13px; display: flex; align-items: center; gap: 6px;
+            z-index: 2;
         }
         .book-btn:hover { box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); transform: scale(1.02); }
 
@@ -323,7 +325,7 @@
         .detail-list li { font-size: 13.5px; color: #e2e8f0; padding: 6px 0; display: flex; align-items: flex-start; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.03); }
         .detail-list li i { color: var(--gold-primary); margin-top: 3px; }
 
-        /* LIGHTBOX للتنقل السلس بين الصور عند الضغط عليها */
+        /* LIGHTBOX */
         .lightbox-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(2, 7, 14, 0.98); backdrop-filter: blur(15px);
@@ -394,11 +396,6 @@
         .chat-msg { max-width: 88%; padding: 10px 14px; border-radius: 14px; font-size: 13px; line-height: 1.5; }
         .chat-msg.bot { background: rgba(212, 175, 55, 0.09); border: 1px solid var(--glass-border); color: #f8fafc; align-self: flex-start; }
         .chat-msg.user { background: var(--gold-gradient); color: #02070e; font-weight: 700; align-self: flex-end; }
-
-        .wa-chat-redirect-btn {
-            background: #25d366; color: white; text-decoration: none; padding: 9px 14px;
-            border-radius: 10px; font-size: 12.5px; font-weight: 800; display: inline-flex; align-items: center; gap: 6px; margin-top: 8px;
-        }
 
         .ai-chat-footer { padding: 10px 14px; border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; gap: 8px; }
         .ai-chat-footer input { flex-grow: 1; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.14); padding: 10px 12px; border-radius: 10px; color: #fff; outline: none; font-size: 12.5px; }
@@ -486,7 +483,7 @@
         </div>
     </header>
 
-    <!-- 1. MAIN HOME PAGE VIEW CONTAINER -->
+    <!-- MAIN HOME PAGE VIEW CONTAINER -->
     <div id="homePageView">
         <section class="hero">
             <div class="hero-badge" data-aos="fade-down"><i class="fa-solid fa-crown"></i> <span id="heroBadgeText">RED SEA EXCLUSIVE EXCURSIONS</span></div>
@@ -513,7 +510,7 @@
         </div>
     </div>
 
-    <!-- 2. SEPARATE ABOUT US PAGE VIEW -->
+    <!-- ABOUT US PAGE VIEW -->
     <div id="aboutPageView">
         <div class="page-banner" data-aos="fade-down">
             <div class="hero-badge"><i class="fa-solid fa-gem"></i> <span id="abBadge">DISCOVER OUR STORY</span></div>
@@ -590,7 +587,7 @@
         </div>
     </div>
 
-    <!-- 3. SEPARATE CONTACT US PAGE VIEW -->
+    <!-- CONTACT US PAGE VIEW -->
     <div id="contactPageView">
         <div class="page-banner" data-aos="fade-down">
             <div class="hero-badge"><i class="fa-solid fa-headset"></i> <span id="ctBadge">GET IN TOUCH WITH US</span></div>
@@ -771,7 +768,7 @@
         </div>
     </div>
 
-    <!-- LIGHTBOX OVERLAY (للتنقل بين الصور عند النقر عليها) -->
+    <!-- LIGHTBOX OVERLAY -->
     <div id="lightboxOverlay" class="lightbox-overlay">
         <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
         <button class="lightbox-nav lightbox-prev" onclick="navigateLightbox(1)">&#10095;</button>
@@ -869,7 +866,6 @@
 
         const officialWhatsAppNumber = "201031688172";
 
-        /* COMPLETE TRANSLATIONS FOR PAGE CONTENT & ABOUT / CONTACT PAGES */
         const translations = {
             en: {
                 actionText: "Book Now", homeText: "Home", aboutText: "About Us", contactText: "Contact Us",
@@ -882,7 +878,6 @@
                 guests: "Guests Breakdown", adults: "Adults", kids10: "Kids > 10 yrs (50%)", kidsFree: "Kids < 10 yrs (FREE)",
                 totalEst: "Total Estimated Price:", confirmWA: "Confirm Booking on WhatsApp",
                 aiWelcome: "👋 Hello! Welcome to ZAFIRO SEA. I am your personal concierge assistant. How can I help you today?", aiPlaceholder: "Type your message...",
-                // About Page
                 abBadge: "DISCOVER OUR STORY", abTitle: "About Zafiro Sea", abHead: "About Zafiro Sea Tourism Company",
                 abP1: "Zafiro Sea Tourism Company is a premier travel and tourism company based in Hurghada, Egypt, dedicated to creating unforgettable experiences across the breathtaking Red Sea. Our passion is to connect travelers with the natural beauty, vibrant marine life, and rich culture that make Hurghada one of the world's most popular holiday destinations.",
                 abP2: "We specialize in organizing high-quality sea excursions, snorkeling and diving adventures, private yacht charters, island trips, desert safaris, cultural excursions, airport transfers, and customized holiday packages.",
@@ -895,9 +890,7 @@
                 why2Title: "Experienced Local Guides", why2Desc: "Deep local knowledge of secret spots and reefs.",
                 why3Title: "High Safety Standards", why3Desc: "Fully licensed vessels and life-saving gear.",
                 why4Title: "Competitive Prices", why4Desc: "Uncompromising luxury with transparent pricing.",
-                // Services List
                 srvList: ["Daily Sea Excursions", "Snorkeling & Diving Trips", "Private Yacht Charters", "Orange Bay & Paradise Island Tours", "Dolphin House Excursions", "Desert Safari Adventures", "Quad Bike & Camel Riding Tours", "Luxor & Cairo Day Trips", "Airport Transfers", "Hotel Reservations", "Customized Holiday Packages"],
-                // Contact Page
                 ctBadge: "GET IN TOUCH WITH US", ctTitle: "Contact Zafiro Sea", ctLocHead: "Headquarters Location",
                 ctLocText: "Bank Residences, Apartment 201, Third Floor, Al Fayrouz, Hurghada, Red Sea, Egypt",
                 ctPhoneHead: "Phone & Call Center", ctWAHead: "WhatsApp Concierge 24/7", ctEmailHead: "Official Email Support",
@@ -916,7 +909,6 @@
                 guests: "تفاصيل الأفراد", adults: "البالغين", kids10: "أطفال أكبر من 10 سنوات (50%)", kidsFree: "أطفال أقل من 10 سنوات (مجاناً)",
                 totalEst: "السعر الإجمالي التقديري:", confirmWA: "تأكيد الحجز عبر الواتساب",
                 aiWelcome: "👋 أهلاً بك في ZAFIRO SEA! أنا مساعدك الشخصي. أقدر أساعدك في إيه النهاردة؟", aiPlaceholder: "اكتب رسالتك...",
-                // About Page
                 abBadge: "اكتشف قصتنا", abTitle: "عن زافيرو سي", abHead: "عن شركة زافيرو سي للسياحة",
                 abP1: "شركة زافيرو سي للسياحة هي شركة رائدة في مجال الرحلات والتوريزم بمحافظة البحر الأحمر والغردقة، متخصصة في تقديم تجارب استثنائية لا تُنسى في أعماق البحر الأحمر. شغفنا هو ربط زوارنا بطبيعة الغردقة الساحرة وشعابها المرجانية الحية.",
                 abP2: "نحن متخصصون في تنظيم الرحلات البحرية عالية الجودة، رحلات السنوركلينج والغوص، تأجير اليخوت الخاصة، زيارة الجزر، السفاري الصحراوي، ورحلات اليوم الواحد إلى الأقصر والقاهرة مع توفير انتقالات المطار والبرامج المخصصة.",
@@ -930,7 +922,6 @@
                 why3Title: "معايير أمان مرتفعة", why3Desc: "معدات إنقاذ كاملة ولنشات مرخصة بالكامل للسلامة.",
                 why4Title: "أسعار تنافسية للغاية", why4Desc: "فخامة ورفاهية بدون تنازل بأسعار واضحة وشفافة.",
                 srvList: ["الرحلات البحرية اليومية", "رحلات الغوص والسنوركلينج", "تأجير اليخوت الخاصة VIP", "رحلات جزر أورانج باي وبارادايس", "رحلات بيت الدلافين", "مغامرات السفاري الصحراوي", "قيادة البيتش باجي وركوب الجمال", "رحلات اليوم الواحد للأقصر والقاهرة", "انتقالات المطار المباشرة", "حجوزات الفنادق", "برامج العطلات المخصصة"],
-                // Contact Page
                 ctBadge: "تواصل معنا مباشرة", ctTitle: "اتصل بشركة زافيرو سي", ctLocHead: "مقر الشركة الرئيسي",
                 ctLocText: "عمارات البنك، شقة 201، الدور الثالث، الفيروز، الغردقة، البحر الأحمر، مصر",
                 ctPhoneHead: "مركز الاتصالات والخدمة", ctWAHead: "خدمة الواتساب 24/7", ctEmailHead: "البريد الإلكتروني الرسمي",
@@ -1027,132 +1018,469 @@
         let currentTripName = '';
         let currentTripBasePriceEUR = 0;
 
-        /* FULL MULTILINGUAL DATABASE FOR TRIPS (يمكنك إضافة عدة صور لكل رحلة هنا لتظهر وتعمل في الـ Lightbox) */
         const tripDetailsData = {
-            'orange-bay': {
-                category: 'islands', priceEUR: 30, 
+            'daily-diving': {
+                category: 'diving', priceEUR: 50,
                 images: [
-                    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200', 
                     'https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1200',
                     'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?q=80&w=1200'
                 ],
-                en: { title: 'Orange Bay Island Escape', desc: 'Experience the Egyptian Caribbean! Hurghada 3-in-1 Sea Trip with iconic water swings.', highlights: ['VIP Pick-up from hotel', 'Elite Sailing with welcome drinks', '2 Hours Stay on Orange Bay Beach'], includes: ['Open Buffet Lunch', 'Unlimited beverages', 'Sanitized snorkeling equipment'] },
-                ar: { title: 'رحلة جزيرة أورانج باي', desc: 'استمتع بكاريمي مصر! رحلة 3 في 1 مع أراجيح المياه الشهيرة والرمال الناعمة.', highlights: ['انتقالات VIP من وإلى الفندق', 'مشروبات ترحيبية على اليخت', 'ساعتان استراحة على شاطئ أورانج باي'], includes: ['بوفيه غداء مفتوح', 'مشروبات بلا حدود طول اليوم', 'معدات سنوركلينج معقمة بالكامل'] },
-                de: { title: 'Orange Bay Inselausflug', desc: 'Erleben Sie die ägyptische Karibik! Hurghada 3-in-1 Seereise mit den berühmten Wasserschaukeln.', highlights: ['VIP-Abholung vom Hotel', 'Segeln mit Begrüßungsgetränken', '2 Stunden Aufenthalt am Orange Bay Strand'], includes: ['Offenes Buffet-Mittagessen', 'Unbegrenzte Getränke', 'Desinfizierte Schnorchelausrüstung'] },
-                it: { title: 'Fuga all\'Isola di Orange Bay', desc: 'Vivi i Caraibi egiziani! Gita in mare 3 in 1 con le famose altalene sull\'acqua.', highlights: ['Pick-up VIP dall\'hotel', 'Navigazione d\'élite con drink di benvenuto', '2 ore di sosta sulla spiaggia di Orange Bay'], includes: ['Pranzo a buffet aperto', 'Bevande illimitate', 'Attrezzatura da snorkeling sanificata'] },
-                ru: { title: 'Экскурсия на остров Оранж Бей', desc: 'Ощутите Египетские Карибы! Морской тур 3 в 1 с знаменитыми качелями в воде.', highlights: ['VIP трансфер из отеля', 'Элитная прогулка с напитками', '2 часа на пляже Оранж Бей'], includes: ['Обед "шведский стол"', 'Безлимитные напитки', 'Снаряжение для снорклинга'] }
+                en: {
+                    title: 'Certified Daily Diving',
+                    desc: 'Certified Daily Diving Trip - International Guests (Per Certified Diver - 2 Dives - Tanks & Weights).',
+                    highlights: [
+                        'Hotel Pick-up: Transfer to the marina and preparing professional logbooks, tanks, and weight belts.',
+                        'Sailing & Dive Briefing: Cruise to the first professional dive site with a detailed technical site briefing.',
+                        'First Certified Dive: Dive into deep water with our expert Divemaster to check unique marine drop-offs (exploration).',
+                        'Fresh Yacht Buffet: Enjoy a hot lunch prepared on board during the mandatory surface interval.',
+                        'Second Certified Dive: Move to a new distinct site for the second technical dive and photography.',
+                        'Return & Logging: Head back to marina to log your dives, followed by a private resort transfer.'
+                    ],
+                    includes: [
+                        'Please bring your Diving Certification Card (License) and Logbook.',
+                        'Tanks, weights, and a professional dive guide are included free of charge.',
+                        'Full scuba diving equipment (Full Kit) is available for rent at the marina upon prior request.',
+                        'Freshly grilled chicken and charcoal-grilled kofta.',
+                        'Oven-baked oriental potatoes and Italian pasta.',
+                        'Egyptian rice with vermicelli and 4 varieties of fresh salads.',
+                        'Complimentary hot & cold beverages and unlimited bottled mineral water.'
+                    ]
+                },
+                ar: {
+                    title: 'رحلة الغوص اليومي للمحترفين',
+                    desc: 'رحلة غوص يومية معتمدة للضيوف الدوليين (لكل غواص معتمد - غطستان - الأسطوانات والأوزان).',
+                    highlights: [
+                        'الاستقبال من الفندق: النقل إلى المارينا وتجهيز سجلات الغوص، الأسطوانات، وأحزمة الأوزان.',
+                        'الإبحار وشرح الغوص: الإبحار إلى موقع الغوص الأول مع شرح فني تفصيلي للموقع.',
+                        'الغطسة الأولى المعتمدة: الغوص في المياه العميقة مع مرشد الغوص الخبير لاستكشاف المنحدرات البحرية الفريدة.',
+                        'بوفيه اليخت الطازج: الاستمتاع بغداء ساخن يتم إعداده على متن اليخت أثناء فترة الراحة الإجبارية.',
+                        'الغطسة الثانية المعتمدة: الانتقال إلى موقع جديد مميز للغطسة الفنية الثانية والتصوير.',
+                        'العودة وتسجيل الغطسات: العودة إلى المارينا لتسجيل الغطسات يتبعها نقل خاص إلى المنتجع.'
+                    ],
+                    includes: [
+                        'يرجى إحضار بطاقة رخصة الغوص وسجل الغوص (Logbook).',
+                        'الأسطوانات، الأوزان، ومرشد الغوص المحترف متضمنة مجاناً.',
+                        'معدات الغوص الكاملة متاحة للإيجار في المارينا عند الطلب المسبق.',
+                        'دجاج مشوي طازج وكفتة مشوية على الفحم.',
+                        'بطاطس فرن شرقي ومكرونة إيطالية.',
+                        'أرز مصري بالشعرية مع 4 أنواع من السلطات الطازجة.',
+                        'مشروبات ساخنة وباردة مجانية ومياه معدنية معبأة بلا حدود.'
+                    ]
+                }
             },
             'hula-hula': {
-                category: 'islands', priceEUR: 30, 
+                category: 'islands', priceEUR: 30,
                 images: [
                     'https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1200',
                     'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200'
                 ],
-                en: { title: 'Hula Hula Island', desc: 'Relax on the pristine white sands of Hula Hula Island.', highlights: ['VIP Pick-up & drinks', 'Snorkeling Stop at coral reefs', 'Island Relaxation'], includes: ['Fresh buffet on board', 'Snorkeling gear free'] },
-                ar: { title: 'رحلة جزيرة هولا هولا', desc: 'استرخِ على الرمال البيضاء الناعمة لجزيرة هولا هولا البحرية.', highlights: ['توصيل VIP ومشروبات', 'وقفة سنوركلينج عند الشعاب المرجانية', 'استرخاء واستمتاع بالشاطئ'], includes: ['بوفيه طازج على متن اليخت', 'معدات السنوركلينج مجاناً'] },
-                de: { title: 'Hula Hula Insel', desc: 'Entspannen Sie am feinen weißen Sand der Hula Hula Insel.', highlights: ['VIP-Abholung & Getränke', 'Schnorchelstopp an Korallenriffen', 'Inselentspannung'], includes: ['Frisches Buffet an Bord', 'Kostenlose Schnorchelausrüstung'] },
-                it: { title: 'Isola Hula Hula', desc: 'Rilassati sulle sabbie bianche e incontaminate dell\'isola di Hula Hula.', highlights: ['Trasferimento VIP e bevande', 'Sosta snorkeling barriera corallina', 'Relax sull\'isola'], includes: ['Pranzo a buffet a bordo', 'Attrezzatura snorkeling inclusa'] },
-                ru: { title: 'Остров Хула Хула', desc: 'Отдохните на белоснежном песке райского острова Хула Хула.', highlights: ['VIP трансфер и напитки', 'Остановка для снорклинга', 'Отдых на острове'], includes: ['Свежий обед на борту', 'Снаряжение бесплатно'] }
+                en: {
+                    title: 'Hula Hula Island',
+                    desc: 'Relax on the pristine white sands of Hula Hula Island with elite luxury itinerary.',
+                    highlights: [
+                        '08:30 AM VIP Pick-up: Premium transfer from hotel to the marina and receiving top-tier snorkeling gear.',
+                        '09:00 AM Elite Sailing: Cruise across the Red Sea with complementary refreshing welcome drinks.',
+                        '10:15 AM First Snorkeling Stop: Immerse into vibrant coral reefs and rare marine life with pro guides.',
+                        '12:00 PM Island Majesty: Relax on the pristine white sands of Hula Hula Island & enjoy the exotic tropical vibes.',
+                        '02:00 PM Gourmet Lunch: Premium fresh buffet prepared on board by our professional chef.',
+                        '03:00 PM Second Stop: Dive into another crystal-clear site for new underwater scenery.',
+                        '04:30 PM Return in Comfort: Smooth cruise back to marina & private transfer back to your resort.'
+                    ],
+                    includes: [
+                        'Grilled chicken marinated with our signature premium blend.',
+                        'Charcoal-grilled kofta with authentic oriental flavor.',
+                        'Oven-baked oriental potatoes + Italian pasta (farfalle).',
+                        'Premium Egyptian rice with vermicelli.',
+                        'Four varieties of fresh salads and pickles, served daily.',
+                        'Unlimited selection of hot and cold beverages.',
+                        'Bring your swimwear, light robe, high-SPF sunscreen, sunglasses, hat, and a waterproof phone case.'
+                    ]
+                },
+                ar: {
+                    title: 'جزيرة هولا هولا',
+                    desc: 'استرخِ على الرمال البيضاء النخبة لجزيرة هولا هولا مع خط سير فاخر.',
+                    highlights: [
+                        '08:30 ص الاستقبال الفاخر VIP: نقل مميز من الفندق إلى المارينا واستلام معدات السنوركلينج.',
+                        '09:00 ص الإبحار النخبة: رحلة بحرية في البحر الأحمر مع مشروبات ترحيبية منعشة.',
+                        '10:15 ص وقفة السنوركلينج الأولى: الانغماس في الشعاب المرجانية النابضة بالحياة مع مرشدين محترفين.',
+                        '12:00 م روعة الجزيرة: الاسترخاء على الرمال البيضاء النقية لجزيرة هولا هولا والاستمتاع بالأجواء الاستوائية.',
+                        '02:00 م الغداء الفاخر: بوفيه طازج متميز يتم إعداده على متن اليخت بواسطة طاهينا المحترف.',
+                        '03:00 م الوقفة الثانية: الغوص في موقع آخر فائق الصفاء لمناظر تحت الماء جديدة.',
+                        '04:30 م العودة براحة: رحلة بحرية هادئة للعودة إلى المارينا ونقل خاص إلى منتجعك.'
+                    ],
+                    includes: [
+                        'دجاج مشوي متبل بخلطتنا المميزة.',
+                        'كفتة مشوية على الفحم بنكهة شرقية أصلية.',
+                        'بطاطس فرن شرقي + مكرونة إيطالية (فارفالا).',
+                        'أرز مصري فاخر بالشعرية.',
+                        'أربع أنواع من السلطات الطازجة والمخللات.',
+                        'تشكيلة غير محدودة من المشروبات الساخنة والباردة.',
+                        'يرجى إحضار ملابس السباحة، رداء خفيف، واقي شمس عالي الحماية، نظارات شمسية، قبعة، وحافظة هاتف مقاومة للماء.'
+                    ]
+                }
             },
             'magawish': {
-                category: 'islands', priceEUR: 25, 
+                category: 'islands', priceEUR: 25,
                 images: [
                     'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200',
                     'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?q=80&w=1200'
                 ],
-                en: { title: 'Magawish Island', desc: 'Explore Magawish Island pristine shores.', highlights: ['VIP Hotel Pick-up', '2 Snorkeling stops', 'Shallow waters stay'], includes: ['Fresh lunch on yacht', 'Complete gear included'] },
-                ar: { title: 'رحلة جزيرة مجاويش', desc: 'استكشف شواطئ جزيرة مجاويش والمياه الكريستالية الضحلة.', highlights: ['انتقالات الفندق VIP', 'وقفتين سنوركلينج', 'استراحة بالشواطئ الضحلة'], includes: ['غداء طازج على اليخت', 'شامل المعدات بالكامل'] },
-                de: { title: 'Magawish Insel', desc: 'Erkunden Sie die unberührten Ufer der Magawish-Insel.', highlights: ['VIP Hotelabholung', '2 Schnorchelstopps', 'Flachwasseraufenthalt'], includes: ['Frisches Mittagessen auf der Yacht', 'Komplette Ausrüstung enthalten'] },
-                it: { title: 'Isola di Magawish', desc: 'Esplora le sponde incontaminate dell\'Isola di Magawish.', highlights: ['Pick-up VIP dall\'hotel', '2 soste snorkeling', 'Sosta in acque basse'], includes: ['Pranzo fresco sullo yacht', 'Attrezzatura completa inclusa'] },
-                ru: { title: 'Остров Магавиш', desc: 'Исследуйте нетронутые берега и чистейшие воды острова Магавиш.', highlights: ['VIP трансфер из отеля', '2 остановки для снорклинга', 'Купание на мелководье'], includes: ['Свежий обед на яхте', 'Полное снаряжение включено'] }
-            },
-            'daily-diving': {
-                category: 'diving', priceEUR: 50, 
-                images: [
-                    'https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1200',
-                    'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?q=80&w=1200'
-                ],
-                en: { title: 'Certified Daily Diving', desc: 'Professional 2-Dive trip for certified divers.', highlights: ['Hotel transfer', '2 Certified Dives', 'Pro Divemaster guide'], includes: ['Tanks & Weights free', 'Luxury Yacht Buffet'] },
-                ar: { title: 'رحلة الغوص اليومي للمحترفين', desc: 'رحلة غطستين كاملتين للغواصين الحاصلين على شهادات غوص.', highlights: ['توصيل من وإلى الفندق', 'غطستان احترافيتان', 'مرشد غوص محترف Divemaster'], includes: ['الأسطوانات والأوزان مجاناً', 'بوفيه فاخر على اليخت'] },
-                de: { title: 'Zertifiziertes Tages-Tauchen', desc: 'Professioneller Ausflug mit 2 Tauchgängen für zertifizierte Taucher.', highlights: ['Hoteltransfer', '2 zertifizierte Tauchgänge', 'Professioneller Divemaster Guide'], includes: ['Flaschen & Gewichte kostenlos', 'Luxus-Yacht-Buffet'] },
-                it: { title: 'Immersioni Giornaliere Certificate', desc: 'Gita professionale con 2 immersioni per sub certificati.', highlights: ['Trasferimento dall\'hotel', '2 immersioni certificate', 'Guida Divemaster professionale'], includes: ['Bombole e zavorra gratis', 'Buffet di lusso sullo yacht'] },
-                ru: { title: 'Дайвинг для сертифицированных', desc: 'Профессиональный тур с 2 погружениями для сертифицированных дайверов.', highlights: ['Трансфер из отеля', '2 погружения с гидом', 'Профессиональный дайвмастер'], includes: ['Баллоны и грузы бесплатно', 'Роскошный обед на яхте'] }
-            },
-            'introductory-dive': {
-                category: 'diving', priceEUR: 35, 
-                images: [
-                    'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?q=80&w=1200',
-                    'https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1200'
-                ],
-                en: { title: 'Introductory Dive', desc: 'Discover coral reefs hand-in-hand with an expert instructor.', highlights: ['Beginner briefing', '2 Intro Dive sessions', 'Snorkeling stop'], includes: ['Full scuba gear', 'Open buffet lunch'] },
-                ar: { title: 'رحلة الغوص الاستكشافي للمبتدئين', desc: 'اكتشف عالم الشعاب المرجانية يدًا بيد مع مدرب غوص خبير.', highlights: ['شرح تعليمي للمبتدئين', 'جلسة غوص استكشافي', 'وقفة سنوركلينج'], includes: ['معدات الغوص بالكامل', 'بوفيه غداء مفتوح'] },
-                de: { title: 'Einführungstauchen', desc: 'Entdecken Sie Korallenriffe Hand in Hand mit einem erfahrenen Tauchlehrer.', highlights: ['Anfängereinweisung', '2 Einführungs-Tauchgänge', 'Schnorchelstopp'], includes: ['Komplette Tauchausrüstung', 'Offenes Buffet-Mittagessen'] },
-                it: { title: 'Immersione Introduttiva', desc: 'Scopri la barriera corallina mano nella mano con un istruttore esperto.', highlights: ['Briefing per principianti', '2 sessioni di immersione', 'Sosta snorkeling'], includes: ['Attrezzatura subacquea completa', 'Pranzo a buffet aperto'] },
-                ru: { title: 'Интро-дайвинг (для новичков)', desc: 'Откройте для себя коралловые рифы за руку с опытным инструктором.', highlights: ['Инструктаж для новичков', '2 погружения с инструктором', 'Снорклинг'], includes: ['Полное снаряжение', 'Обед "шведский стол"'] }
-            },
-            'paradise-submarine': {
-                category: 'diving', priceEUR: 15, 
-                images: [
-                    'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?q=80&w=1200',
-                    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200'
-                ],
-                en: { title: 'Paradise Submarine Snorkel', desc: 'Glass salon view & dedicated snorkeling stop.', highlights: ['Hotel transfer', 'Glass Deck Salon View', 'Snorkeling Stop'], includes: ['Free gear & masks', 'Chilled drinks'] },
-                ar: { title: 'رحلة الغواصة وسنوركلينج بارادايس', desc: 'صالون زجاجي برؤية تحت الماء ووقفة سنوركلينج مخصصة.', highlights: ['توصيل الفندق', 'رؤية بانورامية بالصالون الزجاجي', 'وقفة سنوركلينج'], includes: ['المعدات والماسكات مجاناً', 'مشروبات باردة'] },
-                de: { title: 'Paradise U-Boot Schnorcheln', desc: 'Blick aus dem Glassalon & dedizierter Schnorchelstopp.', highlights: ['Hoteltransfer', 'Aussicht aus dem Glassalon', 'Schnorchelstopp'], includes: ['Kostenlose Ausrüstung & Masken', 'Gekühlte Getränke'] },
-                it: { title: 'Sottomarino Paradise & Snorkeling', desc: 'Vista dal salone panoramico e sosta snorkeling dedicata.', highlights: ['Trasferimento dall\'hotel', 'Vista dal salone in vetro', 'Sosta snorkeling'], includes: ['Attrezzatura e maschere gratis', 'Bevande fresche'] },
-                ru: { title: 'Подводная лодка и Снорклинг', desc: 'Панорамный стеклянный салон и остановка для плавания с маской.', highlights: ['Трансфер из отеля', 'Обзор из стеклянного салона', 'Остановка для снорклинга'], includes: ['Маски и снаряжение бесплатно', 'Освежающие напитки'] }
-            },
-            'speedboat': {
-                category: 'speedboat', priceEUR: 150, 
-                images: [
-                    'https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1200',
-                    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200'
-                ],
-                en: { title: 'Private Speedboat 4 Hours', desc: 'Reach Dolphin House & virgin islands with maximum privacy.', highlights: ['Flexible Start Time', 'Dolphin House access', 'Licensed captain'], includes: ['Unlimited soft drinks', 'Private A/C transfers'] },
-                ar: { title: 'سبيد بوت خاص (4 ساعات)', desc: 'انطلق لبيت الدلافين والجزر العذراء مع أقصى درجات الخصوصية.', highlights: ['مواعيد انطلاق مرنة', 'زيارة بيت الدلافين', 'قبطان محترف ومجاز'], includes: ['مشروبات غازية ومياه مجاناً', 'سيارة خاصة مكيفة لنقلكم'] },
-                de: { title: 'Privates Schnellboot 4 Stunden', desc: 'Erreichen Sie das Delphinhaus & jungfräuliche Inseln mit maximaler Privatsphäre.', highlights: ['Flexible Startzeit', 'Zugang zum Delphinhaus', 'Lizensierter Kapitän'], includes: ['Unbegrenzte Erfrischungsgetränke', 'Private klimatisierte Transfers'] },
-                it: { title: 'Motoscafo Privato 4 Ore', desc: 'Raggiungi la Casa dei Delfini e isole vergini nel massimo della privacy.', highlights: ['Orario di partenza flessibile', 'Accesso alla Casa dei Delfini', 'Capitano con licenza'], includes: ['Bevande analcoliche illimitate', 'Trasferimenti privati con A/C'] },
-                ru: { title: 'Частный скоростной катер (4 часа)', desc: 'Посетите Дом Дельфинов и дикие острова в полной конфиденциальности.', highlights: ['Гибкое время старта', 'Заход в Дом Дельфинов', 'Лицензированный капитан'], includes: ['Напитки без ограничений', 'Частный трансфер с кондиционером'] }
+                en: {
+                    title: 'Magawish Island',
+                    desc: 'Explore Magawish Island pristine shores and crystal-clear shallow waters.',
+                    highlights: [
+                        'VIP Hotel Pick-up: Premium transfer from hotel to the marina and receiving top-tier snorkeling gear. (08:30 AM)',
+                        'Elite Sailing: Cruise across the Red Sea with complementary refreshing welcome drinks. (09:00 AM)',
+                        'First Snorkeling Stop: Immerse into vibrant coral reefs and rare marine life with pro guides. (10:15 AM)',
+                        'Island Majesty: Relax on the pristine shores of Magawish Island & dive into its crystal-clear shallow waters. (12:00 PM)',
+                        'Gourmet Lunch: Premium fresh buffet prepared on board by our professional chef. (02:00 PM)',
+                        'Second Stop: Dive into another crystal-clear site for new underwater scenery. (03:00 PM)',
+                        'Return in Comfort: Smooth cruise back to marina & private transfer back to your resort. (04:30 PM)'
+                    ],
+                    includes: [
+                        'Marinated grilled chicken prepared with the chef’s signature secret seasoning.',
+                        'Charcoal-grilled kofta with authentic Oriental flavors.',
+                        'Oven-baked Oriental potatoes and fresh Italian pasta.',
+                        'Premium Egyptian rice with vermicelli.',
+                        'Four varieties of freshly prepared salads and daily appetizers.',
+                        'Unlimited complimentary hot and cold beverages served throughout the trip.',
+                        'Sanitized snorkeling equipment, life jackets, and comfortable transfer included.'
+                    ]
+                },
+                ar: {
+                    title: 'جزيرة مجاويش',
+                    desc: 'استكشف شواطئ جزيرة مجاويش البكر ومياهها الضحلة الصافية كالصري.',
+                    highlights: [
+                        'الاستقبال الفاخر من الفندق: نقل مميز من الفندق للمارينا واستلام معدات السنوركلينج. (08:30 صباحاً)',
+                        'الإبحار النخبة: جولة عبر البحر الأحمر مع مشروبات ترحيبية منعشة مجانية. (09:00 صباحاً)',
+                        'وقفة السنوركلينج الأولى: الانغماس في الشعاب المرجانية النابضة بالحياة مع مرشدين محترفين. (10:15 صباحاً)',
+                        'عظمة الجزيرة: الاسترخاء على شواطئ مجاويش البكر والغوص في مياهها الضحلة الصافية. (12:00 ظهراً)',
+                        'الغداء الفاخر: بوفيه طازج متميز يُعد على متن اليخت بواسطة طاهينا المحترف. (02:00 ظهراً)',
+                        'الوقفة الثانية: الغوص في موقع آخر صافٍ لمشاهدة مناظر طبيعية تحت الماء جديدة. (03:00 عصراً)',
+                        'العودة براحة: رحلة بحرية هادئة للمارينا وانتقال خاص للعودة إلى منتجعك. (04:30 عصراً)'
+                    ],
+                    includes: [
+                        'دجاج مشوي متبل بتتبيلة الشيف السرية الخاصة.',
+                        'كفتة مشوية على الفحم بنكهات شرقية أصلية.',
+                        'بطاطس فرن شرقي ومكرونة إيطالية طازجة.',
+                        'أرز مصري فاخر بالشعرية.',
+                        'أربع أنواع من السلطات المُعدة طازجة والمقبلات اليومية.',
+                        'مشروبات ساخنة وباردة مجانية غير محدودة طوال الرحلة.',
+                        'معدات سنوركلينج معقمة، سترات نجاة، وانتقالات مريحة متضمنة.'
+                    ]
+                }
             },
             'mountain-safari': {
-                category: 'safari', priceEUR: 30, 
+                category: 'safari', priceEUR: 30,
                 images: [
                     'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?q=80&w=1200',
                     'https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1200'
                 ],
-                en: { title: 'Mountain Safari', desc: 'Quad Biking, Spider Car, Bedouin Village & BBQ Show.', highlights: ['Quad Biking (45 Mins)', 'Spider Car buggies', 'Bedouin Village & Camel Ride'], includes: ['Open Buffet BBQ Dinner', 'Live Oriental Show'] },
-                ar: { title: 'رحلة السفاري الجبلية', desc: 'بيتش باجي، سيارات سبايدر، القرية البدوية، وعشاء مشويات.', highlights: ['قيادة بيتش باجي (45 دقيقة)', 'سيارات السبايدر باجي', 'القرية البدوية وركوب الجمال'], includes: ['عشاء بوفيه مشويات بدوي', 'حفلة وعرض شرقي مباشر'] },
-                de: { title: 'Berg-Safari', desc: 'Quadfahren, Spider-Car, Beduinendorf & BBQ-Show.', highlights: ['Quadfahren (45 Min.)', 'Spider-Car-Buggies', 'Beduinendorf & Kamelreiten'], includes: ['Offenes BBQ-Buffet-Abendessen', 'Live Orient-Show'] },
-                it: { title: 'Safari in Montagna', desc: 'Quad, Spider Car, Villaggio Beduino e Spettacolo BBQ.', highlights: ['Guida in Quad (45 Min)', 'Buggy Spider Car', 'Villaggio Beduino e giro in cammello'], includes: ['Cena BBQ a buffet', 'Spettacolo orientale dal vivo'] },
-                ru: { title: 'Горное Сафари в пустыне', desc: 'Квадроциклы, Багги Спайдер, бедуинская деревня и шоу с ужином.', highlights: ['Катание на квадроциклах', 'Багги Спайдер', 'Бедуинская деревня и верблюды'], includes: ['Ужин "шведский стол" BBQ', 'Восточное шоу'] }
+                en: {
+                    title: 'Mountain Safari',
+                    desc: 'Quad Biking, Spider Car, Bedouin Village & BBQ Show + Super Safari option available.',
+                    highlights: [
+                        'Hotel Pick-up (01:30 PM): Free transfer from your resort in a modern A/C vehicle to the desert safari station.',
+                        'Briefing & Preparation (02:15 PM): Put on Bedouin scarves/goggles, and get a quick safety orientation for test driving.',
+                        'Quad Biking (02:45 PM): Drive into the heart of the rugged mountains for 45 mins, testing speed and off-road tracks.',
+                        'Spider Car Experience (03:45 PM): Hop into the open-cockpit desert buggies for a thrill-filled group cruise.',
+                        'Bedouin Village & Sunset (04:30 PM): Experience traditional camel riding, drink warm Bedouin herbal tea, and watch the breathtaking desert sunset.',
+                        'Gourmet Dinner & Live Show (06:00 PM): Indulge in an open buffet BBQ dinner while enjoying Tanoura, oriental belly dancing, and an amazing fire show.',
+                        'Comfortable Return (07:30 PM): Head back to your hotel after a magical, star-lit Arabian desert night.'
+                    ],
+                    includes: [
+                        'Charcoal-grilled chicken and seasoned Bedouin-style kofta.',
+                        'Oriental rice and pasta with rich tomato sauce.',
+                        'Freshly cooked vegetables and oven-baked Oriental potatoes.',
+                        'Four varieties of fresh salads, including tahini, baba ghanoush, and green salad.',
+                        'Bottled mineral water and cold beverages included with dinner.',
+                        'Super Safari Adventure option: Horse Riding + Jeep Safari + Beach Buggy + Dinner.'
+                    ]
+                },
+                ar: {
+                    title: 'رحلة السفاري الجبلية',
+                    desc: 'بيتش باجي، سيارات سبايدر، القرية البدوية وعشاء مشويات + خيار السوبر سفاري المتاح.',
+                    highlights: [
+                        'الاستقبال من الفندق (01:30 ظهراً): نقل مجاني من منتجعك بسيارة حديثة مكيفة إلى محطة سفاري الصحراء.',
+                        'التوجيه والتحضير (02:15 عصراً): ارتداء الشماغات/النظارات البدوية، والحصول على إرشادات السلامة لتجربة القيادة.',
+                        'قيادة البيتش باجي (02:45 عصراً): الانطلاق لقلب الجبال الوعرة لمدة 45 دقيقة لاختبار السرعة والمسارات غير الممهدة.',
+                        'تجربة سيارات السبايدر (03:45 عصراً): ركوب عربات الصحراء ذات المقصورة المفتوحة لرحلة جماعية مثيرة.',
+                        'القرية البدوية والغروب (04:30 عصراً): تجربة ركوب الجمال التقليدية، وتناول شاي الأعشاب البدوي الدافئ، ومشاهدة غروب الصحراء الخلاب.',
+                        'العشاء الفاخر والعرض الحي (06:00 مساءً): الاستمتاع ببوفيه عشاء مشويات مفتوح مع عروض التنورة، الرقص الشرقي، وعرض النار المذهل.',
+                        'العودة المريحة (07:30 مساءً): العودة إلى الفندق بعد ليلة صحراوية عربية ساحرة تحت النجوم.'
+                    ],
+                    includes: [
+                        'دجاج مشوي على الفحم وكفتة مبهرة على الطريقة البدوية.',
+                        'أرز شرقي ومكرونة بصلصة الطماطم الغنية.',
+                        'خضروات مطبوخة طازجة وبطاطس فرن شرقي.',
+                        'أربع أنواع من السلطات الطازجة تشمل الطحينة، بابا غنوج، والسلطة الخضراء.',
+                        'مياه معدنية معبأة ومشروبات باردة متضمنة مع العشاء.',
+                        'خيار مغامرة السوبر سفاري: ركوب الخيل + سفاري الجيب + بيتش باجي + العشاء.'
+                    ]
+                }
             },
-            'private-boat': {
-                category: 'speedboat', priceEUR: 0, 
+            'paradise-submarine': {
+                category: 'diving', priceEUR: 15,
+                images: [
+                    'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?q=80&w=1200',
+                    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200'
+                ],
+                en: {
+                    title: 'Paradise Submarine Snorkel',
+                    desc: 'Glass salon view & dedicated snorkeling stop for families and couples.',
+                    highlights: [
+                        '09:00 AM Hotel Pick-up: Smooth hotel transfer by an A/C tourist vehicle heading straight to the submarine marina.',
+                        '09:45 AM Glass Deck View (45 Mins): Welcome drink handover, then descend to the underwater glass salon to watch amazing reefs for 45 minutes.',
+                        '10:30 AM Snorkeling Stop (45 Mins): Climb up, grab your complimentary masks and life jackets, and dive into the water to swim alongside vibrant sea life.',
+                        '11:15 AM Relaxation & Sailing Back: Spend the remaining time relaxing on the sun deck or the air-conditioned salon, taking unforgettable panoramic photos.',
+                        '12:00 PM Arrival & Hotel Drop-off: Secure docking at the jetty, board your dedicated vehicles, and head back comfortably to your resort.'
+                    ],
+                    includes: [
+                        'Premium snorkeling equipment provided free of charge, including a comfortable mask and sanitized snorkel.',
+                        'A life jacket is provided for every guest to ensure maximum safety during the swimming stop.',
+                        'Each guest receives complimentary chilled mineral water and a refreshing cold soft drink during the trip.',
+                        'Professional dive guides and tour leaders are always available to assist children and first-time swimmers.'
+                    ]
+                },
+                ar: {
+                    title: 'رحلة الغواصة وسنوركلينج بارادايس',
+                    desc: 'صالون زجاجي برؤية تحت الماء ووقفة سنوركلينج مخصصة للعائلات والأزواج.',
+                    highlights: [
+                        '09:00 صباحاً الاستقبال من الفندق: نقل سلس بسيارة سياحية مكيفة متجهة مباشرة إلى مارينا الغواصة.',
+                        '09:45 صباحاً رؤية السطح الزجاجي (45 دقيقة): تسليم المشروب الترحيبي، ثم النزول إلى الصالون الزجاجي تحت الماء لمشاهدة الشعاب المذهلة.',
+                        '10:30 صباحاً وقفة السنوركلينج (45 دقيقة): الصعود لأعلى، أخذ الأقنعة وسترات النجاة المجانية، والنزول للسباحة بجانب الحياة البحرية.',
+                        '11:15 صباحاً الاسترخاء والإبحار عودةً: قضاء الوقت المتبقي في الاسترخاء على سطح الشمس أو الصالون المكيف والتقاط صور بانورامية.',
+                        '12:00 ظهراً الوصول والعودة للفندق: الرسو الآمن والعودة براحة تامة إلى منتجعك.'
+                    ],
+                    includes: [
+                        'معدات سنوركلينج فاخرة مجانية تشمل قناع مريح وأنبوبة تنفس معقمة.',
+                        'توفير سترة نجاة لكل ضيف لضمان أقصى درجات الأمان أثناء التوقف للسباحة.',
+                        'يحصل كل ضيف على مياه معدنية مثلجة ومشروب غازي بارد منعش مجاناً خلال الرحلة.',
+                        'مرشدون محترفون وقادة رحلات متواجدون دائماً لمساعدة الأطفال والسباحين لأول مرة.'
+                    ]
+                }
+            },
+            'speedboat': {
+                category: 'speedboat', priceEUR: 150,
                 images: [
                     'https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1200',
                     'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200'
                 ],
-                en: { title: 'Private Yacht Charter', desc: 'Custom itinerary for birthdays, honeymoons and privacy.', highlights: ['Custom itinerary', 'Dedicated crew', 'Hijab friendly privacy'], includes: ['Snorkeling & fishing gear', 'VIP private transfers'] },
-                ar: { title: 'تأجير يخت خاص VIP', desc: 'برنامج مخصص للمناسبات، أعياد الميلاد، شهر العسل، والخصوصية.', highlights: ['برنامج رحلة مخصص', 'طاقم عمل مخصص لرعايتكم', 'خصوصية كاملة للعائلات'], includes: ['معدات سنوركلينج وصيد', 'توصيل خاص VIP'] },
-                de: { title: 'Private Yacht-Charter', desc: 'Individueller Reiseplan für Geburtstage, Flitterwochen und Privatsphäre.', highlights: ['Individueller Reiseplan', 'Dedizierte Crew', '100% Privatsphäre'], includes: ['Schnorchel- & Angelausrüstung', 'Private VIP-Transfers'] },
-                it: { title: 'Noleggio Yacht Privato', desc: 'Itinerario personalizzato per compleanni, lune di miele e privacy.', highlights: ['Itinerario su misura', 'Equipaggio dedicato', 'Massima privacy'], includes: ['Attrezzatura snorkeling e pesca', 'Trasferimenti VIP privati'] },
-                ru: { title: 'Аренда частной яхты', desc: 'Индивидуальный маршрут для дней рождения, медового месяца и отдыха.', highlights: ['Индивидуальная программа', 'Личный экипаж', 'Полная конфиденциальность'], includes: ['Снаряжение и рыбалка', 'Частный VIP трансфер'] }
+                en: {
+                    title: 'Private Speedboat (Flexible Duration)',
+                    desc: 'Reach Dolphin House & virgin islands with maximum privacy and custom timing.',
+                    highlights: [
+                        'Flexible Pick-up & Timing: Private A/C hotel transfer. You can freely choose your preferred start time (Morning or Afternoon slots).',
+                        'Dolphin House & Swimming: Thanks to the high speed, we reach dolphin spots quickly, enjoying a premium chance to swim alongside them.',
+                        'Vibrant Snorkeling Spots: Accessing remote coral reefs and virgin islands for snorkeling away from traditional tourist crowds.'
+                    ],
+                    includes: [
+                        'Unlimited soft drinks and chilled bottled mineral water available throughout the trip.',
+                        'Premium snorkeling equipment, including comfortable masks and life jackets, provided free of charge.',
+                        'Private round-trip hotel transfers with fully sanitized, air-conditioned vehicles.',
+                        'A licensed professional boat captain will accompany you and guide you to the safest, best spots.'
+                    ]
+                },
+                ar: {
+                    title: 'سبيد بوت خاص (مدة مرنة)',
+                    desc: 'انطلق لبيت الدلافين والجزر العذراء مع أقصى درجات الخصوصية والمواعيد المرنة.',
+                    highlights: [
+                        'مواعيد وانتقالات مرنة: نقل خاص مكيف من الفندق. يمكنك اختيار وقت البدء المفضل لديك بحرية (فترات صباحية أو مسائية).',
+                        'بيت الدلافين والسباحة: بفضل السرعة العالية، نصل لمناطق الدلافين بسرعة للاستمتاع بفرصة فريدة للسباحة معها.',
+                        'أماكن سنوركلينج نابضة بالحياة: الوصول إلى شعاب مرجانية وجزر عذراء بعيدة عن زحام السياح التقليديين.'
+                    ],
+                    includes: [
+                        'مشروبات غازية بلا حدود ومياه معدنية مثلجة معبأة طوال الرحلة.',
+                        'معدات سنوركلينج فاخرة، تشمل أقنعة مريحة وسترات نجاة، متوفرة مجاناً.',
+                        'انتقالات خاصة ذهاباً وإياباً من الفندق بسيارات مكيفة ومعقمة بالكامل.',
+                        'قبطان قارب محترف مرخص سيرافقك ويوجهك لأفضل وأضمن مناطق السباحة والسنوركلينج.'
+                    ]
+                }
+            },
+            'introductory-dive': {
+                category: 'diving', priceEUR: 35,
+                images: [
+                    'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?q=80&w=1200',
+                    'https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1200'
+                ],
+                en: {
+                    title: 'Introductory Dive',
+                    desc: 'Intro Diving Trip for Beginners - International Guests (Per Person - Includes 2 Intro Dives, Full Gear & Instructor).',
+                    highlights: [
+                        'VIP Pick-up & Fitting: Transfer from resort to marina, receiving perfectly fitted diving gear.',
+                        'Beginner Briefing: Clear, professional orientation on board explaining breathing and basic underwater hand signs.',
+                        'The Intro Dive: Dive hand-in-hand with your instructor to safely discover the majestic coral reefs for a magical experience.',
+                        'Gourmet Fresh Lunch: Enjoy a delicious buffet fresh-cooked on the yacht and relax in the sun.',
+                        'Snorkeling & Swimming: A second top marine stop for free swimming, snorkeling, and taking beautiful photos.',
+                        'Smooth Return Transfer: Arrive back at the marina and private comfortable ride back to your hotel.'
+                    ],
+                    includes: [
+                        'No diving license or previous swimming experience is required — your professional instructor stays with you.',
+                        'Full scuba diving equipment and sanitized wetsuits included free of charge.',
+                        'Marinated grilled chicken and delicious charcoal-grilled kofta.',
+                        'Oven-baked potatoes and fresh pasta with the chef\'s signature sauce.',
+                        'Fluffy Egyptian rice with vermicelli and 4 varieties of fresh salads.',
+                        'Unlimited hot & cold beverages available throughout the trip.'
+                    ]
+                },
+                ar: {
+                    title: 'رحلة الغوص الاستكشافي للمبتدئين',
+                    desc: 'رحلة غوص للمبتدئين للضيوف الدوليين (تشمل غطستين استكشافيتين، المعدات الكاملة والمدرب).',
+                    highlights: [
+                        'الاستقبال الفاخر وتجهيز المعدات: الانتقال من المنتجع للمارينا واستلام معدات الغوص المناسبة تماماً.',
+                        'شرح المبتدئين: إرشادات واضحة ومحترفة على اليخت تشرح التنفس وإشارات اليد الأساسية تحت الماء.',
+                        'الغطسة الاستكشافية: الغوص يداً بيد مع مدربك لاستكشاف الشعاب المرجانية الساحرة بأمان تام.',
+                        'الغداء الفاخر الطازج: الاستمتاع ببوفيه شهي مطهو طازجاً على اليخت والاسترخاء تحت الشمس.',
+                        'السنوركلينج والسباحة: وقفة بحرية ثانية للسباحة الحرة، السنوركلينج، والتقاط صور جميلة.',
+                        'العودة السلسة: الوصول للمارينا وعودة خاصة مريحة إلى الفندق.'
+                    ],
+                    includes: [
+                        'لا تتطلب رخصة غوص أو خبرة سابقة في السباحة — مدربك المحترف سيبقى معك طوال الوقت.',
+                        'معدات غوص كاملة وبدلات غوص معقمة متضمنة مجاناً.',
+                        'دجاج مشوي متبل وكفتة لذيذة مشوية على الفحم.',
+                        'بطاطس فرن ومكرونة طازجة بصلصة الشيف الخاصة.',
+                        'أرز مصري مفلفل بالشعرية و 4 أنواع من السلطات الطازجة.',
+                        'مشروبات ساخنة وباردة غير محدودة متوفرة طوال الرحلة.'
+                    ]
+                }
+            },
+            'orange-bay': {
+                category: 'islands', priceEUR: 20,
+                images: [
+                    'https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1200',
+                    'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?q=80&w=1200'
+                ],
+                en: {
+                    title: 'Orange Bay Island',
+                    desc: 'Hurghada 3-in-1 Sea Trip: Dolphin, Island, Snorkel & Lunch (8 Hours).',
+                    highlights: [
+                        'VIP Pick-up: Premium transfer from hotel to the marina and receiving top-tier snorkeling gear.',
+                        'Elite Sailing: Cruise across the Red Sea with complementary refreshing welcome drinks.',
+                        'Dolphin Search: Cruise along open waters in search of wild dolphins in their natural habitat.',
+                        'Island Majesty: Relax on the pristine white sands of Orange Bay and enjoy the iconic water swings.',
+                        'Gourmet Lunch: Premium fresh buffet prepared on board by our professional chef.',
+                        'First Snorkeling Stop: Dive into vibrant coral reef gardens with pro guides to explore marine life.',
+                        'Second Snorkeling Stop: Explore another crystal-clear underwater reef site for new scenery.',
+                        'Return in Comfort: Smooth cruise back to marina and private transfer back to your resort.'
+                    ],
+                    includes: [
+                        'Marinated grilled chicken prepared with the chef’s signature secret seasoning.',
+                        'Charcoal-grilled kofta with authentic Oriental flavors.',
+                        'Oven-baked Oriental potatoes and fresh Italian pasta.',
+                        'Premium Egyptian rice with vermicelli.',
+                        'Four varieties of freshly prepared salads and daily appetizers.',
+                        'Unlimited complimentary hot and cold beverages served throughout the trip.',
+                        'Fully sanitized snorkeling equipment and life jackets included free of charge.'
+                    ]
+                },
+                ar: {
+                    title: 'جزيرة أورانج باي',
+                    desc: 'رحلة بحرية 3 في 1 في الغردقة: دلافين، جزيرة، سنوركلينج وغداء (8 ساعات).',
+                    highlights: [
+                        'الاستقبال الفاخر VIP: نقل مميز من الفندق للمارينا واستلام معدات سنوركلينج فائقة الجودة.',
+                        'الإبحار النخبة: جولة في البحر الأحمر مع مشروبات ترحيبية منعشة.',
+                        'البحث عن الدلافين: الإبحار في المياه المفتوحة بحثاً عن الدلافين البرية في بيئتها الطبيعية.',
+                        'عظمة الجزيرة: الاسترخاء على الرمال البيضاء النقية لأورانج باي والاستمتاع بأراجيح المياه الشهيرة.',
+                        'الغداء الفاخر: بوفيه طازج مميز يُعد على متن اليخت بواسطة طاهينا المحترف.',
+                        'وقفة السنوركلينج الأولى: الغوص في حدائق الشعاب المرجانية النابضة بالحياة مع مرشدين.',
+                        'وقفة السنوركلينج الثانية: استكشاف موقع شعاب مرجانية صافٍ آخر لمناظر جديدة.',
+                        'العودة براحة: رحلة بحرية هادئة للمارينا ونقل خاص إلى منتجعك.'
+                    ],
+                    includes: [
+                        'دجاج مشوي متبل بتتبيلة الشيف السرية الخاصة.',
+                        'كفتة مشوية على الفحم بنكهات شرقية أصلية.',
+                        'بطاطس فرن شرقي ومكرونة إيطالية طازجة.',
+                        'أرز مصري فاخر بالشعرية.',
+                        'أربع أنواع من السلطات المُعدة طازجة والمقبلات اليومية.',
+                        'مشروبات ساخنة وباردة مجانية غير محدودة طوال الرحلة.',
+                        'معدات سنوركلينج معقمة بالكامل وسترات نجاة مجانية.'
+                    ]
+                }
+            },
+            'private-boat': {
+                category: 'speedboat', priceEUR: 0,
+                images: [
+                    'https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1200',
+                    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200'
+                ],
+                en: {
+                    title: 'Private Yacht Charter',
+                    desc: 'Custom itinerary for birthdays, honeymoons, private family events and complete privacy.',
+                    highlights: [
+                        'Flexible Timings: Choose your own departure and return times according to your preference.',
+                        'Custom Itinerary: Select your preferred stops (Dolphin House, Islands, Snorkeling spots, or Fishing zones).',
+                        'Professional Crew: Dedicated captain and hospitality crew at your full disposal ensuring safety and service.',
+                        'Perfect for Special Occasions: Birthdays, anniversaries, engagement celebrations, and hijab-friendly privacy.'
+                    ],
+                    includes: [
+                        'Complimentary Gear: Free professional snorkeling equipment, life jackets, and basic fishing rods on board.',
+                        'Onboard Catering: Optional upgrade for freshly cooked Seafood/BBQ lunch buffet, or simple soft drinks and fruits setup.',
+                        'VIP private round-trip transfers between your hotel and the marina.',
+                        'Full yacht decoration options (balloons, flowers, cake) and premium sound systems with A/C salon.'
+                    ]
+                },
+                ar: {
+                    title: 'تأجير يخت خاص VIP',
+                    desc: 'برنامج مخصص لأعياد الميلاد، شهر العسل، المناسبات العائلية الخاصة والخصوصية التامة.',
+                    highlights: [
+                        'مواعيد مرنة: اختر أوقات المغادرة والعودة الخاصة بك حسب تفضيلاتك.',
+                        'مسار مخصص: حدد محطاتك المفضلة (بيت الدلافين، الجزر، مناطق السنوركلينج، أو مناطق الصيد).',
+                        'طاقم محترف: قبطان وطاقم ضيافة مخصص تحت تصرفك الكامل لضمان الأمان والخدمة المتميزة.',
+                        'مثالي للمناسبات الخاصة: أعياد الميلاد، الذكريات السنوية، الاحتفالات، وخصوصية تامة تناسب العائلات والمحجبات.'
+                    ],
+                    includes: [
+                        'معدات مجانية: معدات سنوركلينج احترافية مجانية، سترات نجاة، وعصي صيد أساسية على متن اليخت.',
+                        'تجهيزات الطعام: إمكانية طلب ترقية لبوفيه غداء مأكولات بحرية/مشويات طازجة، أو إعداد مشروبات خفيفة وفواكه.',
+                        'انتقالات VIP خاصة ذهاباً وإياباً بين فندقك والمارينا.',
+                        'خيارات زينة كاملة لليخت (بالونات، زهور، تورتة) وأنظمة صوت فاخرة مع صالون مكيف.'
+                    ]
+                }
             },
             'sunset-private': {
-                category: 'speedboat', priceEUR: 250, 
+                category: 'speedboat', priceEUR: 250,
                 images: [
                     'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200',
                     'https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1200'
                 ],
-                en: { title: 'Sunset Private Yacht', desc: '3-hour evening private charter with snacks & sunset views.', highlights: ['Private transfer 04:00 PM', 'Welcome drink', 'Magic Sunset view'], includes: ['Deluxe snack platter', 'Unlimited beverages'] },
-                ar: { title: 'رحلة يخت خاص عند الغروب', desc: 'رحلة مسائية خاصة لمدة 3 ساعات لمشاهدة الغروب مع الوجبات الخفيفة.', highlights: ['توصيل خاص 04:00 مساءً', 'مشروبات ترحيبية', 'مشهد الغروب الساحر'], includes: ['طبق وجبات خفيفة فاخر', 'مشروبات بلا حدود'] },
-                de: { title: 'Sonnenuntergang Private Yacht', desc: '3-stündiger abendlicher privater Charter mit Snacks & Sonnenuntergang.', highlights: ['Privater Transfer 16:00 Uhr', 'Begrüßungsgetränk', 'Magischer Sonnenuntergang'], includes: ['Deluxe-Snack-Platte', 'Unbegrenzte Getränke'] },
-                it: { title: 'Yacht Privato al Tramonto', desc: 'Charter privato serale di 3 ore con snack e vista sul tramonto.', highlights: ['Trasferimento privato 16:00', 'Drink di benvenuto', 'Vista magica del tramonto'], includes: ['Piatto di snack deluxe', 'Bevande illimitate'] },
-                ru: { title: 'Частная яхта на закате', desc: '3-часовая вечерняя прогулка с закусками и видом на закат.', highlights: ['Частный трансфер в 16:00', 'Приветственный напиток', 'Волшебный вид на закат'], includes: ['Деликатесные закуски', 'Безлимитные напитки'] }
+                en: {
+                    title: 'Sunset Private Yacht',
+                    desc: '3-hour evening private charter with snacks, VIP hospitality, and magical sunset views.',
+                    highlights: [
+                        '04:00 PM Private Pick-up: Exclusive hotel transfer by an A/C vehicle dedicated only for your group straight to the VIP marina.',
+                        '04:45 PM Private Boarding: Step on your private yacht with a fresh welcome drink as we set sail into the calm open sea.',
+                        '05:15 PM VIP Sailing & Lounge: Full access to the private yacht, custom music selection, and premium snacks setup on deck.',
+                        '06:00 PM The Magic Sunset Backdrop: Capturing breathtaking, uninterrupted private photos as the sun sets behind the golden mountains.',
+                        '07:00 PM Return & Private Drop-off: Sail back under the twilight sky, dock safely, and enjoy a private transfer back to your resort.'
+                    ],
+                    includes: [
+                        'A fully private yacht exclusively reserved for your group, ensuring maximum comfort and privacy.',
+                        'Fresh welcome drinks, along with chilled sparkling and mineral water, served throughout the trip.',
+                        'Unlimited complimentary hot beverages, including premium tea, coffee, and Nescafé.',
+                        'A deluxe snack platter featuring mini sandwiches, freshly baked pastries, and seasonal fresh fruits.',
+                        'Perfect for marriage proposals, honeymoons, and complete privacy for families and ladies wearing hijab.'
+                    ]
+                },
+                ar: {
+                    title: 'رحلة يخت خاص عند الغروب',
+                    desc: 'رحلة مسائية خاصة لمدة 3 ساعات مع وجبات خفيفة، ضيافة VIP، ومشاهد غروب ساحرة.',
+                    highlights: [
+                        '04:00 عصراً الاستقبال الخاص: نقل حصري بسيارة مكيفة مخصصة لمجموعتك فقط مباشرة إلى المارينا.',
+                        '04:45 عصراً الصعود الخاص: خطوتك الأولى على اليخت الخاص مع مشروب ترحيبي طازج مع الإبحار في البحر المفتوح الهادئ.',
+                        '05:15 عصراً الإبحار الفاخر: وصول كامل لليخت الخاص، اختيار موسيقى مخصص، وتجهيز وجبات خفيفة فاخرة على السطح.',
+                        '06:00 مساءً خلفية الغروب الساحرة: التقاط صور خاصة مذهلة لا توصف بينما تغرب الشمس خلف الجبال الذهبية.',
+                        '07:00 مساءً العودة والنقل الخاص: الإبحار تحت سماء الغسق، الرسو بأمان، والاستمتاع بنقل خاص للعودة للمنتجع.'
+                    ],
+                    includes: [
+                        'يخت خاص بالكامل محجوز حصرياً لمجموعتك لضمان أقصى درجات الراحة والخصوصية.',
+                        'مشروبات ترحيبية طازجة، مياه معدنية وفوارة مبردة طوال الرحلة.',
+                        'مشروبات ساخنة مجانية غير محدودة تشمل الشاي الفاخر، القهوة، والنسكافيه.',
+                        'طبق وجبات خفيفة فاخر يضم سندويتشات صغيرة، معجنات مخبوزة طازجة، وفواكه موسمية.',
+                        'مثالي لطلبات الزواج، شهر العسل، والخصوصية التامة للعائلات والمحجبات.'
+                    ]
+                }
             }
         };
 
-        /* Lightbox Gallery Control Functions */
         let lightboxImagesList = [];
         let lightboxCurrentIndex = 0;
 
@@ -1224,17 +1552,17 @@
                 trip.highlights.slice(0, 3).forEach(h => { includesHtml += `<li><i class="fa-solid fa-check"></i> ${h}</li>`; });
 
                 container.innerHTML += `
-                    <div class="trip-card" data-category="${tripObj.category}" data-aos="fade-up">
-                        <div class="media-carousel" onclick='openLightbox(${JSON.stringify(tripObj.images)}, 0)'>
+                    <div class="trip-card" data-category="${tripObj.category}" data-aos="fade-up" onclick="openDetailModal('${key}')">
+                        <div class="media-carousel" onclick='event.stopPropagation(); openLightbox(${JSON.stringify(tripObj.images)}, 0)'>
                             <div class="carousel-track"><div class="carousel-slide"><img src="${tripObj.images[0]}" alt="${trip.title}"></div></div>
                         </div>
                         <div class="trip-content">
-                            <div class="trip-title" onclick="openDetailModal('${key}')">${trip.title}</div>
+                            <div class="trip-title">${trip.title}</div>
                             <div class="trip-desc">${trip.desc}</div>
                             <ul class="trip-includes">${includesHtml}</ul>
                             <div class="trip-footer">
                                 <div class="price-amount">${getConvertedPrice(tripObj.priceEUR)}</div>
-                                <button class="book-btn" onclick="openBookingModal('${key}', ${tripObj.priceEUR})">
+                                <button class="book-btn" onclick="event.stopPropagation(); openBookingModal('${key}', ${tripObj.priceEUR})">
                                     <i class="fa-brands fa-whatsapp"></i> ${t.bookNow}
                                 </button>
                             </div>
@@ -1261,13 +1589,11 @@
             html.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
             html.setAttribute('lang', lang);
 
-            // Navbar
             document.getElementById('navActionText').innerText = t.actionText;
             document.getElementById('navHomeText').innerText = t.homeText;
             document.getElementById('navAboutText').innerText = t.aboutText;
             document.getElementById('navContactText').innerText = t.contactText;
 
-            // Hero Section
             document.getElementById('heroBadgeText').innerText = t.badge;
             document.getElementById('heroTitle').innerText = t.title;
             document.getElementById('heroDesc').innerText = t.desc;
@@ -1275,14 +1601,12 @@
             document.getElementById('trust2').innerText = t.trust2;
             document.getElementById('trust3').innerText = t.trust3;
 
-            // Tabs
             document.getElementById('tabAll').innerText = t.all;
             document.getElementById('tabIslands').innerText = t.islands;
             document.getElementById('tabSpeedboat').innerText = t.speedboat;
             document.getElementById('tabDiving').innerText = t.diving;
             document.getElementById('tabSafari').innerText = t.safari;
 
-            // About Page Dynamic Translation
             document.getElementById('abBadge').innerText = t.abBadge;
             document.getElementById('abTitle').innerText = t.abTitle;
             document.getElementById('aboutHead').innerText = t.abHead;
@@ -1305,7 +1629,6 @@
             document.getElementById('why4Title').innerText = t.why4Title;
             document.getElementById('why4Desc').innerText = t.why4Desc;
 
-            // Render Services list dynamically
             const srvBox = document.getElementById('servicesGridBox');
             if(srvBox) {
                 srvBox.innerHTML = '';
@@ -1315,7 +1638,6 @@
                 });
             }
 
-            // Contact Page Dynamic Translation
             document.getElementById('ctBadge').innerText = t.ctBadge;
             document.getElementById('ctTitle').innerText = t.ctTitle;
             document.getElementById('ctLocHead').innerText = t.ctLocHead;
@@ -1334,7 +1656,6 @@
             document.getElementById('lblFormMsg').innerText = t.lblFormMsg;
             document.getElementById('btnSendMsgWA').innerText = t.btnSendMsgWA;
 
-            // Footer & AI Assistant
             document.getElementById('footerAboutTxt').innerText = t.abP1;
             document.getElementById('footerToursHead').innerText = t.all;
             document.getElementById('footerContactHead').innerText = t.contactText;
@@ -1354,12 +1675,10 @@
             document.getElementById('dtTitle').innerText = trip.title;
             document.getElementById('dtPrice').innerText = tripObj.priceEUR > 0 ? `${getConvertedPrice(tripObj.priceEUR)}` : (currentLang === 'ar' ? 'حسب الطلب' : 'Custom Price / VIP Charter');
             
-            // Main image click to open lightbox
             const mainImg = document.getElementById('dtMainImg');
             mainImg.src = tripObj.images[0];
             mainImg.onclick = () => openLightbox(tripObj.images, 0);
 
-            // Sub images
             const subImg1 = document.getElementById('dtSubImg1');
             subImg1.src = tripObj.images[1] || tripObj.images[0];
             subImg1.onclick = () => openLightbox(tripObj.images, 1);
@@ -1413,7 +1732,6 @@
             const date = document.getElementById('custDate').value;
             const adults = document.getElementById('cntAdults').value;
             const kids10 = document.getElementById('cntKids10').value;
-            const kidsFree = document.getElementById('cntKidsFree').value;
             const total = document.getElementById('calculatedTotal').innerText;
 
             const rawMessage = `ZAFIRO SEA | VIP Reservation\nName: ${name}\nHotel: ${hotel}\nRoom: ${room || 'N/A'}\nDate: ${date}\nTrip: ${currentTripName}\nAdults: ${adults}, Kids: ${kids10}\nTotal: ${total}`;
@@ -1433,7 +1751,6 @@
             window.open(`https://wa.me/${officialWhatsAppNumber}?text=${encodeURIComponent(rawMessage)}`, '_blank');
         }
 
-        /* SMART CONVERSATIONAL AI SUPPORT WITH AUTO LANGUAGE & NO FORCED WHATSAPP */
         function toggleAIChat() {
             const win = document.getElementById('aiChatWindow');
             win.style.display = (win.style.display === 'flex') ? 'none' : 'flex';
@@ -1456,59 +1773,19 @@
             setTimeout(() => {
                 const lower = text.toLowerCase();
                 let botReply = "";
-                let isBookingIntent = false;
-                let tripQueryParam = text;
-
                 const isArabicText = /[\u0600-\u06FF]/.test(text);
 
                 if (lower === 'hello' || lower === 'hi' || lower === 'hey' || lower.includes('أهلا') || lower.includes('مرحبا') || lower.includes('السلام عليكم') || lower.includes('hallo')) {
                     if (isArabicText || currentLang === 'ar') {
                         botReply = "أهلاً بك! كيف يمكنني مساعدتك اليوم؟ يمكنك الاستفسار عن رحلات البحر الأحمر، الغوص، الجزر، أو الأسعار.";
-                    } else if (currentLang === 'de') {
-                        botReply = "Hallo! Wie kann ich Ihnen heute helfen? Sie können nach unseren Ausflügen, Preisen oder Inseltouren fragen.";
-                    } else if (currentLang === 'it') {
-                        botReply = "Ciao! Come posso aiutarti oggi? Puoi chiedere informazioni sulle nostre escursioni, immersioni o prezzi.";
-                    } else if (currentLang === 'ru') {
-                        botReply = "Здравствуйте! Чем я могу вам помочь сегодня? Вы можете спросить о наших экскурсиях, островах и ценах.";
                     } else {
                         botReply = "Hello! How can I assist you today? Feel free to ask about our Red Sea excursions, island tours, diving, or prices.";
                     }
-                } 
-                else if (lower.includes('price') || lower.includes('cost') || lower.includes('سعر') || lower.includes('بكام') || lower.includes('اسعار')) {
-                    if (isArabicText || currentLang === 'ar') {
-                        botReply = "أسعار رحلاتنا تبدأ من 15€ وتختلف حسب نوع الرحلة (أورانج باي، غوص، سبيد بوت، سفاري). هل تبحث عن رحلة فردية أم عائلية؟";
-                    } else {
-                        botReply = "Our excursion prices start from €15 depending on the trip (Orange Bay, Diving, Speedboat, Safari). Are you looking for a family trip or private charter?";
-                    }
-                } 
-                else if (lower.includes('book') || lower.includes('reserve') || lower.includes('احجز') || lower.includes('حجز') || lower.includes('أورانج') || lower.includes('orange') || lower.includes('speed') || lower.includes('سبيد')) {
-                    isBookingIntent = true;
-                    if (lower.includes('orange') || lower.includes('أورانج')) tripQueryParam = "Orange Bay Island Escape";
-                    if (lower.includes('speed') || lower.includes('سبيد')) tripQueryParam = "Private Speedboat Tour";
-
-                    if (isArabicText || currentLang === 'ar') {
-                        botReply = "يسعدنا جداً ترتيب رحلتك! يمكنك تأكيد الحجز مباشرة مع فريقنا عبر الواتساب:";
-                    } else {
-                        botReply = "We would love to arrange your excursion! You can easily confirm your booking and details with us via WhatsApp:";
-                    }
-                } 
-                else {
-                    if (isArabicText || currentLang === 'ar') {
-                        botReply = "شكراً لتواصلك! أنا هنا لمساعدتك في اختيار أفضل تجربة في البحر الأحمر بالغردقة. هل تود الاستفسار عن رحلة معينة؟";
-                    } else {
-                        botReply = "Thank you for reaching out! I'm here to help you find the best Red Sea experience in Hurghada. Which excursion are you interested in?";
-                    }
+                } else {
+                    botReply = "Thank you for reaching out! I'm here to help you find the best Red Sea experience in Hurghada.";
                 }
 
-                let botMsgHtml = `<div class="chat-msg bot">${botReply}`;
-                
-                if (isBookingIntent) {
-                    const waUrl = `https://wa.me/${officialWhatsAppNumber}?text=${encodeURIComponent('مرحباً ZAFIRO SEA، أريد الاستفسار والحجز بخصوص: ' + tripQueryParam)}`;
-                    const btnLabel = (isArabicText || currentLang === 'ar') ? 'تواصل واحجز عبر الواتساب' : 'Book via WhatsApp Now';
-                    botMsgHtml += `<br><a href="${waUrl}" target="_blank" class="wa-chat-redirect-btn"><i class="fa-brands fa-whatsapp"></i> ${btnLabel}</a>`;
-                }
-
-                botMsgHtml += `</div>`;
+                let botMsgHtml = `<div class="chat-msg bot">${botReply}</div>`;
                 body.innerHTML += botMsgHtml;
                 body.scrollTop = body.scrollHeight;
             }, 500);
