@@ -280,11 +280,11 @@
         .modal-overlay.active { display: flex; }
 
         .booking-modal, .detail-modal {
-            background: #06111e; width: 100%; max-width: 680px; max-height: 92vh;
+            background: #06111e; width: 100%; max-width: 750px; max-height: 92vh;
             border-radius: 22px; overflow-y: auto; border: 1.5px solid var(--glass-border);
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.95); animation: modalSlide 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .detail-modal { max-width: 820px; }
+        .detail-modal { max-width: 860px; }
 
         @keyframes modalSlide {
             from { transform: translateY(30px) scale(0.96); opacity: 0; }
@@ -303,14 +303,12 @@
         .modal-body { padding: 22px; }
         @media(min-width: 576px) { .modal-body { padding: 30px; } }
 
-        .detail-img-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 20px; }
-        @media(min-width: 500px) { .detail-img-grid { grid-template-columns: 2fr 1fr; gap: 12px; } }
-        .detail-main-img { width: 100%; height: 240px; object-fit: cover; border-radius: 14px; border: 1px solid var(--glass-border); cursor: pointer; }
-        @media(min-width: 500px) { .detail-main-img { height: 260px; } }
-        .detail-side-imgs { display: flex; gap: 10px; }
-        @media(min-width: 500px) { .detail-side-imgs { flex-direction: column; height: 260px; gap: 10px; } }
-        .detail-sub-img { width: 100%; height: 80px; object-fit: cover; border-radius: 10px; border: 1px solid var(--glass-border); cursor: pointer; }
-        @media(min-width: 500px) { .detail-sub-img { height: 125px; } }
+        /* Dynamic Multi-Images Gallery in Detail Modal */
+        .modal-gallery-container { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+        .modal-main-view-img { width: 100%; height: 280px; object-fit: cover; border-radius: 14px; border: 1px solid var(--glass-border); cursor: pointer; }
+        .modal-thumbs-grid { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; }
+        .modal-thumbs-grid img { width: 85px; height: 65px; object-fit: cover; border-radius: 8px; border: 1.5px solid var(--glass-border); cursor: pointer; flex-shrink: 0; opacity: 0.7; }
+        .modal-thumbs-grid img:hover, .modal-thumbs-grid img.active-thumb { opacity: 1; border-color: var(--gold-primary); transform: scale(1.05); }
 
         .detail-title { font-family: 'Playfair Display', serif; font-size: 26px; color: #fff; margin-bottom: 8px; }
         .detail-price { font-size: 24px; font-weight: 900; color: var(--gold-primary); margin-bottom: 16px; }
@@ -681,12 +679,10 @@
                 <button class="close-modal" onclick="closeDetailModal()">&times;</button>
             </div>
             <div class="modal-body">
-                <div class="detail-img-grid">
-                    <img id="dtMainImg" class="detail-main-img" src="" alt="Main Trip Photo">
-                    <div class="detail-side-imgs">
-                        <img id="dtSubImg1" class="detail-sub-img" src="" alt="Gallery Photo 1">
-                        <img id="dtSubImg2" class="detail-sub-img" src="" alt="Gallery Photo 2">
-                    </div>
+                <!-- Dynamic Multi-Image Gallery Wrapper -->
+                <div class="modal-gallery-container">
+                    <img id="dtMainViewImg" class="modal-main-view-img" src="" alt="Main Trip Photo">
+                    <div id="dtThumbsGrid" class="modal-thumbs-grid"></div>
                 </div>
 
                 <h2 id="dtTitle" class="detail-title"></h2>
@@ -1023,7 +1019,8 @@
                 category: 'diving', priceEUR: 50,
                 images: [
                     'https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1200',
-                    'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?q=80&w=1200'
+                    'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?q=80&w=1200',
+                    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200'
                 ],
                 en: {
                     title: 'Certified Daily Diving',
@@ -1761,8 +1758,15 @@
             'orange-bay': {
                 category: 'islands', priceEUR: 20,
                 images: [
-                    'https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1200',
-                    'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?q=80&w=1200'
+                    "images/p2.png.jpg",
+                    "images/p3.png.jpg",
+                    "images/p4.png.jpg",
+                    "images/p5.png.jpg",
+                    "images/p6.png.jpg",
+                    "images/p7.png.jpg",
+                    "images/p8.png.jpg",
+                    "images/p9.png.jpg",
+                    "images/p10.png.jpg"
                 ],
                 en: {
                     title: 'Orange Bay Island',
@@ -2257,17 +2261,17 @@
             document.getElementById('dtTitle').innerText = trip.title;
             document.getElementById('dtPrice').innerText = tripObj.priceEUR > 0 ? `${getConvertedPrice(tripObj.priceEUR)}` : (currentLang === 'ar' ? 'حسب الطلب' : (currentLang === 'ru' ? 'По запросу' : 'Custom Price / VIP Charter'));
             
-            const mainImg = document.getElementById('dtMainImg');
-            mainImg.src = tripObj.images[0];
-            mainImg.onclick = () => openLightbox(tripObj.images, 0);
+            // Dynamic multi-images rendering in detail modal
+            const mainViewImg = document.getElementById('dtMainViewImg');
+            const thumbsGrid = document.getElementById('dtThumbsGrid');
+            
+            mainViewImg.src = tripObj.images[0];
+            mainViewImg.onclick = () => openLightbox(tripObj.images, 0);
 
-            const subImg1 = document.getElementById('dtSubImg1');
-            subImg1.src = tripObj.images[1] || tripObj.images[0];
-            subImg1.onclick = () => openLightbox(tripObj.images, 1);
-
-            const subImg2 = document.getElementById('dtSubImg2');
-            subImg2.src = tripObj.images[2] || tripObj.images[0];
-            subImg2.onclick = () => openLightbox(tripObj.images, 2);
+            thumbsGrid.innerHTML = '';
+            tripObj.images.forEach((imgUrl, idx) => {
+                thumbsGrid.innerHTML += `<img src="${imgUrl}" class="${idx === 0 ? 'active-thumb' : ''}" onclick="setMainDetailImage('${imgUrl}', this, ${idx})">`;
+            });
 
             document.getElementById('dtDesc').innerText = trip.desc;
 
@@ -2282,6 +2286,21 @@
             document.getElementById('dtBookBtn').onclick = function() { closeDetailModal(); openBookingModal(tripKey, tripObj.priceEUR); };
             document.getElementById('detailModal').classList.add('active');
         }
+
+        function setMainDetailImage(url, thumbElement, index) {
+            document.getElementById('dtMainViewImg').src = url;
+            document.getElementById('dtMainViewImg').onclick = () => openLightbox(lightboxImagesReference, index);
+            document.querySelectorAll('.modal-thumbs-grid img').forEach(img => img.classList.remove('active-thumb'));
+            thumbElement.classList.add('active-thumb');
+        }
+
+        let lightboxImagesReference = [];
+        // Override openLightbox to keep track of current trip's images array
+        const originalOpenLightbox = openLightbox;
+        openLightbox = function(imgArray, index) {
+            lightboxImagesReference = imgArray;
+            originalOpenLightbox(imgArray, index);
+        };
 
         function closeDetailModal() { document.getElementById('detailModal').classList.remove('active'); }
 
