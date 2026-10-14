@@ -1,133 +1,906 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr" id="htmlRoot">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة تحكم زافيرو سي | Zafiro Sea Admin Panel</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <title>ZAFIRO SEA | Elite Marine Excursions Hurghada</title>
+    
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,800;1,600;1,800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- AOS Animation CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    
     <style>
         :root {
             --bg-deep: #02070e;
+            --bg-header: rgba(4, 13, 24, 0.85);
             --gold-primary: #d4af37;
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
-            --card-bg: rgba(6, 18, 32, 0.85);
-            --glass-border: rgba(212, 175, 55, 0.25);
+            --gold-light: #fbe8a6;
+            --card-bg: rgba(6, 18, 32, 0.75);
+            --glass-border: rgba(212, 175, 55, 0.22);
+            --glass-border-hover: rgba(212, 175, 55, 0.8);
             --text-main: #f8fafc;
             --text-sub: #94a3b8;
+            --footer-bg: #030a14;
+            --orange-accent: #ff6b35;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
-        body { background-color: var(--bg-deep); color: var(--text-main); padding: 20px; direction: rtl; }
-        .header { text-align: center; margin-bottom: 30px; padding: 20px; background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: 15px; }
-        .header h1 { color: var(--gold-primary); font-size: 26px; margin-bottom: 5px; }
-        .header p { color: var(--text-sub); font-size: 14px; }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', 'Cairo', sans-serif;
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        body[dir="rtl"] { font-family: 'Cairo', sans-serif; }
+
+        /* Header Navbar */
+        header {
+            background: var(--bg-header);
+            backdrop-filter: blur(16px);
+            padding: 14px 4%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--glass-border);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .logo { display: flex; align-items: center; text-decoration: none; cursor: pointer; }
+        .logo-text { display: flex; flex-direction: column; }
+        .logo-title {
+            font-family: 'Cinzel', serif; font-size: 22px; font-weight: 900;
+            background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            letter-spacing: 2px; line-height: 1; filter: drop-shadow(0 2px 10px rgba(212,175,55,0.3));
+        }
+        .logo-sub { font-size: 8px; letter-spacing: 3px; color: var(--text-sub); margin-top: 4px; text-transform: uppercase; font-weight: 700; }
+
+        .header-controls { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+        .select-pill {
+            background: rgba(255, 255, 255, 0.04); color: var(--text-main);
+            border: 1px solid rgba(255, 255, 255, 0.12); padding: 7px 10px;
+            border-radius: 10px; font-size: 12px; font-weight: 700; outline: none; cursor: pointer;
+        }
+
+        .select-pill:hover { border-color: var(--gold-primary); background: rgba(212, 175, 55, 0.1); }
+        .select-pill option { background: #06121e; color: #fff; }
+
+        .nav-link-btn {
+            background: rgba(212, 175, 55, 0.08); color: var(--gold-light);
+            border: 1px solid var(--glass-border); padding: 7px 12px;
+            border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer;
+            display: inline-flex; align-items: center; gap: 6px;
+        }
+
+        .nav-link-btn:hover, .nav-link-btn.active-nav {
+            border-color: var(--gold-primary); color: #02070e; background: var(--gold-gradient);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .header-action-btn {
+            background: var(--gold-gradient); color: #03070d; padding: 8px 16px;
+            border-radius: 10px; text-decoration: none; font-weight: 800; font-size: 12.5px;
+            display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 25px rgba(212, 175, 55, 0.35);
+        }
+
+        .header-action-btn:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 8px 35px rgba(212, 175, 55, 0.5); }
+
+        /* HERO & HOME VIEWS */
+        .hero {
+            position: relative; min-height: 70vh;
+            background: linear-gradient(180deg, rgba(2, 7, 14, 0.4) 0%, rgba(2, 7, 14, 0.98) 100%), 
+                        url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=2000') center/cover no-repeat;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 50px 15px 60px;
+        }
+
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            border: 1px solid var(--glass-border); background: rgba(6, 18, 32, 0.65);
+            backdrop-filter: blur(12px); padding: 8px 18px; border-radius: 50px;
+            color: var(--gold-primary); font-size: 11.5px; font-weight: 800;
+            letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(212,175,55,0.15);
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif; font-size: 38px; font-weight: 800;
+            color: #ffffff; max-width: 950px; line-height: 1.2; margin-bottom: 18px;
+            text-shadow: 0 10px 40px rgba(0,0,0,0.9); padding: 0 10px;
+        }
+
+        .hero p { font-size: 15px; color: var(--text-sub); max-width: 750px; line-height: 1.6; margin-bottom: 30px; padding: 0 15px; }
+
+        .hero-trust-pills { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-bottom: 30px; padding: 0 10px; }
+
+        .trust-pill {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px); padding: 10px 18px; border-radius: 12px;
+            font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 8px; color: var(--text-main);
+        }
+        .trust-pill i { color: var(--gold-primary); font-size: 15px; }
+
+        /* Filter Category Tabs */
+        .filter-tabs {
+            max-width: 1300px; margin: 35px auto 30px; padding: 0 15px;
+            display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+        }
+
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.03); color: var(--text-sub);
+            border: 1px solid rgba(255, 255, 255, 0.08); padding: 10px 20px;
+            border-radius: 35px; font-weight: 700; cursor: pointer; font-size: 13.5px;
+        }
+
+        .tab-btn.active, .tab-btn:hover {
+            background: var(--gold-gradient); color: #02070e; border-color: transparent;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); font-weight: 800;
+        }
+
+        /* Main Grid & Cards */
+        .container { max-width: 1300px; margin: 0 auto 60px; padding: 0 15px; }
+        .trips-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+
+        .trip-card {
+            background: var(--card-bg); border-radius: 20px; overflow: hidden;
+            border: 1px solid var(--glass-border); display: flex; flex-direction: column;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6); backdrop-filter: blur(12px);
+            cursor: pointer;
+        }
+
+        .trip-card:hover { transform: translateY(-5px); border-color: var(--glass-border-hover); box-shadow: 0 20px 45px rgba(212, 175, 55, 0.2); }
+
+        .media-carousel { position: relative; width: 100%; height: 220px; background: #000; overflow: hidden; }
+        .carousel-track { display: flex; width: 100%; height: 100%; }
+        .carousel-slide { min-width: 100%; height: 100%; }
+        .carousel-slide img { width: 100%; height: 100%; object-fit: cover; }
+
+        .trip-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; }
+        .trip-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+        .trip-card:hover .trip-title { color: var(--gold-primary); }
+        .trip-desc { font-size: 13.5px; color: var(--text-sub); line-height: 1.55; margin-bottom: 16px; }
+
+        .trip-includes { list-style: none; margin-bottom: 20px; display: flex; flex-direction: column; gap: 8px; flex-grow: 1; }
+        .trip-includes li {
+            font-size: 12.5px; color: #e2e8f0; display: flex; align-items: center; gap: 8px; font-weight: 600;
+            background: rgba(255, 255, 255, 0.025); padding: 7px 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.04);
+        }
+        .trip-includes li i { color: var(--gold-primary); font-size: 12px; }
+
+        .trip-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+        .price-amount { font-size: 22px; font-weight: 900; color: var(--gold-primary); }
+
+        .book-btn {
+            background: var(--gold-gradient); color: #02070e; padding: 10px 18px; border-radius: 10px;
+            border: none; cursor: pointer; font-weight: 800; font-size: 13px; display: flex; align-items: center; gap: 6px;
+            z-index: 2;
+        }
+        .book-btn:hover { box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); transform: scale(1.02); }
+
+        /* ABOUT & CONTACT VIEWS */
+        #aboutPageView, #contactPageView, #adminPageView {
+            display: none; padding: 40px 15px 80px; max-width: 1200px; margin: 0 auto;
+            animation: fadeInPage 0.4s ease-out;
+        }
+
+        @keyframes fadeInPage {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-banner {
+            text-align: center; padding: 40px 15px; margin-bottom: 35px;
+            background: linear-gradient(180deg, rgba(6, 18, 32, 0.8) 0%, rgba(2, 7, 14, 0.95) 100%);
+            border: 1px solid var(--glass-border); border-radius: 22px;
+        }
+
+        .page-banner h1 { font-family: 'Playfair Display', serif; font-size: 32px; color: #fff; margin-top: 8px; }
+
+        /* Admin Panel Custom Styles */
+        .admin-card { background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; margin-bottom: 25px; }
+        .admin-card h2 { font-size: 20px; color: var(--gold-primary); margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; font-size: 13.5px; font-weight: 700; color: var(--gold-light); margin-bottom: 6px; }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%; padding: 12px 14px; background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 10px;
+            font-size: 14px; color: #fff; outline: none; font-weight: 600;
+        }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--gold-primary); box-shadow: 0 0 15px rgba(212, 175, 55, 0.25); }
+        .file-upload-box { border: 2px dashed var(--glass-border); padding: 20px; text-align: center; border-radius: 12px; cursor: pointer; background: rgba(255,255,255,0.02); }
+        .file-upload-box:hover { background: rgba(212,175,55,0.05); }
+        .preview-thumbs-grid { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+        .preview-thumbs-grid img { width: 70px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid var(--gold-primary); }
+
+        /* Modals Design */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(2, 7, 14, 0.94); backdrop-filter: blur(15px);
+            display: none; justify-content: center; align-items: center; z-index: 2000; padding: 15px;
+        }
+        .modal-overlay.active { display: flex; }
+
+        .booking-modal, .detail-modal {
+            background: #06111e; width: 100%; max-width: 750px; max-height: 92vh;
+            border-radius: 22px; overflow-y: auto; border: 1.5px solid var(--glass-border);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.95); animation: modalSlide 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .detail-modal { max-width: 860px; }
+
+        @keyframes modalSlide {
+            from { transform: translateY(30px) scale(0.96); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        .modal-header {
+            background: rgba(255, 255, 255, 0.03); color: white; padding: 18px 25px;
+            display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border);
+            position: sticky; top: 0; background: #06111e; z-index: 10;
+        }
+        .modal-header h3 { font-family: 'Cinzel', serif; font-size: 20px; color: var(--gold-primary); font-weight: 800; }
+        .close-modal { background: none; border: none; color: #fff; font-size: 26px; cursor: pointer; opacity: 0.8; }
+        .close-modal:hover { opacity: 1; color: var(--gold-primary); }
+
+        .modal-body { padding: 22px; }
+        @media(min-width: 576px) { .modal-body { padding: 30px; } }
+
+        .modal-gallery-container { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+        .modal-main-view-img { width: 100%; height: 280px; object-fit: cover; border-radius: 14px; border: 1px solid var(--glass-border); cursor: pointer; }
+        .modal-thumbs-grid { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; }
+        .modal-thumbs-grid img { width: 85px; height: 65px; object-fit: cover; border-radius: 8px; border: 1.5px solid var(--glass-border); cursor: pointer; flex-shrink: 0; opacity: 0.7; }
+        .modal-thumbs-grid img:hover, .modal-thumbs-grid img.active-thumb { opacity: 1; border-color: var(--gold-primary); transform: scale(1.05); }
+
+        .detail-title { font-family: 'Playfair Display', serif; font-size: 26px; color: #fff; margin-bottom: 8px; }
+        .detail-price { font-size: 24px; font-weight: 900; color: var(--gold-primary); margin-bottom: 16px; }
+        .detail-section-heading { font-size: 16px; font-weight: 800; color: var(--gold-light); margin: 18px 0 10px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; display: flex; align-items: center; gap: 8px; }
+        .detail-text { font-size: 14px; color: var(--text-sub); line-height: 1.7; }
         
-        .container { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
-        .card { background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: 15px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .card h2 { font-size: 18px; color: var(--gold-primary); margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; display: flex; align-items: center; gap: 8px; }
-        
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 5px; }
-        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; color: #fff; font-size: 14px; outline: none; }
-        .form-group input:focus, .form-group textarea:focus { border-color: var(--gold-primary); }
-        
-        .btn { background: var(--gold-gradient); color: #02070e; border: none; padding: 12px 20px; border-radius: 10px; font-weight: 800; font-size: 14px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(212,175,55,0.3); }
-        .btn:hover { transform: translateY(-2px); }
-        .file-input-box { border: 2px dashed var(--glass-border); padding: 15px; text-align: center; border-radius: 8px; cursor: pointer; background: rgba(255,255,255,0.02); }
-        .file-input-box input { display: none; }
-        .preview-img { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; margin-top: 8px; border: 1px solid var(--gold-primary); }
-        .actions-bar { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+        .detail-grid-info { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 14px; }
+        @media(min-width: 600px) { .detail-grid-info { grid-template-columns: 1fr 1fr; gap: 18px; } }
+        .detail-box-pane { background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.08); padding: 16px; border-radius: 14px; }
+        .detail-list { list-style: none; margin-top: 8px; }
+        .detail-list li { font-size: 13.5px; color: #e2e8f0; padding: 6px 0; display: flex; align-items: flex-start; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.03); }
+        .detail-list li i { color: var(--gold-primary); margin-top: 3px; }
+
+        /* LIGHTBOX */
+        .lightbox-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(2, 7, 14, 0.98); backdrop-filter: blur(15px);
+            display: none; justify-content: center; align-items: center; z-index: 9999; padding: 10px;
+        }
+        .lightbox-overlay.active { display: flex; }
+        .lightbox-content { max-width: 94%; max-height: 80vh; border-radius: 14px; object-fit: contain; border: 1.5px solid var(--glass-border); box-shadow: 0 20px 50px rgba(0,0,0,0.9); }
+        .lightbox-close, .lightbox-nav {
+            position: absolute; background: rgba(255,255,255,0.15); color: #fff; border: 1px solid var(--glass-border);
+            font-size: 16px; padding: 10px 16px; cursor: pointer; border-radius: 10px; z-index: 10000;
+        }
+        .lightbox-close { top: 15px; left: 15px; }
+        .lightbox-prev { right: 15px; top: 50%; transform: translateY(-50%); }
+        .lightbox-next { left: 15px; top: 50%; transform: translateY(-50%); }
+
+        /* Booking Form */
+        .form-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 18px; }
+        @media(min-width: 500px) { .form-grid { grid-template-columns: 1fr 1fr; } }
+        .form-group-full { grid-column: 1 / -1; }
+        .counter-section-title { font-size: 13.5px; font-weight: 800; color: #fff; margin-bottom: 10px; margin-top: 5px; }
+        .counter-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+        .counter-box { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); padding: 12px 8px; border-radius: 12px; text-align: center; }
+        .counter-box label { font-size: 10.5px; color: var(--text-sub); margin-bottom: 5px; font-weight: 700; display: block; }
+        .counter-box input { text-align: center; padding: 2px; font-size: 18px; font-weight: 900; background: transparent; border: none; color: var(--gold-primary); width: 100%; }
+
+        .price-summary { background: rgba(212, 175, 55, 0.08); border: 1.5px dashed var(--gold-primary); padding: 16px; border-radius: 14px; display: flex; justify-content: space-between; align-items: center; }
+        .price-summary-text { font-size: 14px; font-weight: 800; color: #fff; }
+        .price-summary-total { font-size: 24px; font-weight: 900; color: var(--gold-primary); }
+
+        .submit-booking-btn {
+            width: 100%; background: #25d366; color: white; padding: 15px; border: none;
+            border-radius: 12px; font-size: 15.5px; font-weight: 800; cursor: pointer; margin-top: 20px;
+            display: flex; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 8px 25px rgba(37, 211, 102, 0.35);
+        }
+        .submit-booking-btn:hover { background: #1ebc57; }
+
+        /* FLOATING ADMIN & HELP BUTTONS */
+        .floating-buttons-wrap { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 1500; }
+        .help-pill-btn, .admin-pill-btn {
+            background: var(--gold-gradient); color: #02070e; padding: 12px 20px; border-radius: 50px;
+            display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 900;
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.5); cursor: pointer; border: none;
+        }
+        .admin-pill-btn { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: #fff; }
+        .help-pill-btn:hover, .admin-pill-btn:hover { transform: translateY(-3px) scale(1.03); }
+
+        /* AI CHAT */
+        .ai-chat-window {
+            position: fixed; bottom: 95px; right: 15px; width: 360px; max-width: 92vw; height: 480px;
+            background: #06111e; border: 1.5px solid var(--glass-border); border-radius: 22px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.9); display: none; flex-direction: column; overflow: hidden; z-index: 1500;
+        }
+        .ai-chat-header { background: rgba(255, 255, 255, 0.04); padding: 15px 18px; border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: space-between; }
+        .ai-chat-header h4 { font-size: 14.5px; color: var(--gold-light); display: flex; align-items: center; gap: 8px; font-weight: 800; }
+        .ai-chat-body { flex-grow: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .chat-msg { max-width: 88%; padding: 10px 14px; border-radius: 14px; font-size: 13px; line-height: 1.5; }
+        .chat-msg.bot { background: rgba(212, 175, 55, 0.09); border: 1px solid var(--glass-border); color: #f8fafc; align-self: flex-start; }
+        .chat-msg.user { background: var(--gold-gradient); color: #02070e; font-weight: 700; align-self: flex-end; }
+        .ai-chat-footer { padding: 10px 14px; border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; gap: 8px; }
+        .ai-chat-footer input { flex-grow: 1; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.14); padding: 10px 12px; border-radius: 10px; color: #fff; outline: none; font-size: 12.5px; }
+        .ai-chat-footer button { background: var(--gold-gradient); border: none; padding: 0 14px; border-radius: 10px; color: #02070e; cursor: pointer; font-weight: 800; }
+
+        /* FOOTER */
+        footer.site-footer-premium {
+            background: var(--footer-bg); color: #f8fafc; padding: 60px 5% 30px;
+            border-top: 1px solid var(--glass-border); position: relative; overflow: hidden;
+        }
+        .footer-container { max-width: 1300px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 35px; }
+        @media (min-width: 768px) { .footer-container { grid-template-columns: 1fr 1fr; } }
+        @media (min-width: 1024px) { .footer-container { grid-template-columns: 1.3fr 1fr 1fr 1.3fr; gap: 30px; } }
+        .footer-col h3 { font-family: 'Cinzel', serif; font-size: 18px; font-weight: 800; color: var(--gold-light); margin-bottom: 20px; position: relative; padding-bottom: 8px; }
+        .footer-col h3::after { content: ''; position: absolute; bottom: 0; left: 0; width: 30px; height: 2px; background: var(--gold-gradient); border-radius: 2px; }
+        .footer-brand-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+        .footer-brand-logo i { font-size: 28px; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .footer-brand-title { font-family: 'Cinzel', serif; font-size: 22px; font-weight: 900; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 2px; }
+        .footer-about-text { font-size: 13.5px; line-height: 1.7; color: var(--text-sub); }
+        .footer-links-list, .footer-social-list, .footer-contact-list { list-style: none; }
+        .footer-links-list li, .footer-social-list li, .footer-contact-list li { margin-bottom: 10px; font-size: 13.5px; color: #e2e8f0; }
+        .footer-links-list a, .footer-social-list a, .footer-contact-list a { color: #e2e8f0; text-decoration: none; }
+        .footer-bottom { max-width: 1300px; margin: 40px auto 0; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.06); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 12.5px; color: var(--text-sub); }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="header">
-            <h1><i class="fa-solid fa-ship"></i> لوحة تحكم موقع زافيرو سي</h1>
-            <p>قم بتعديل الأسعار والرحلات، وارفع الصور مباشرة من جهازك بكل سهولة</p>
-        </div>
-
-        <div class="card">
-            <h2><i class="fa-solid fa-list-check"></i> اختر الرحلة للتعديل</h2>
-            <div class="form-group">
-                <label>اختر الرحلة:</label>
-                <select id="tripSelector" onchange="loadTripData()">
-                    <option value="daily-diving">Daily Diving (الغوص اليومي)</option>
-                    <option value="hula-hula">Hula Hula Island (جزيرة هولا هولا)</option>
-                    <option value="magawish">Magawish Island (جزيرة مجاويش)</option>
-                    <option value="mountain-safari">Mountain Safari (السفاري الجبلية)</option>
-                    <option value="paradise-submarine">Paradise Submarine (الغواصة والسنوركلينج)</option>
-                    <option value="speedboat">Private Speedboat (السبيد بوت الخاص)</option>
-                    <option value="introductory-dive">Introductory Dive (الغوص الاستكشافي)</option>
-                    <option value="orange-bay">Orange Bay Island (جزيرة أورانج باي)</option>
-                    <option value="private-boat">Private Yacht Charter (تأجير يخت خاص)</option>
-                    <option value="sunset-private">Sunset Private Yacht (يخت خاص للغروب)</option>
-                </select>
+    <!-- Header Navbar -->
+    <header>
+        <div class="logo" onclick="showHomePage()">
+            <div class="logo-text">
+                <span class="logo-title">ZAFIRO SEA</span>
+                <span class="logo-sub">LUXURY MARINE TOURS</span>
             </div>
         </div>
+        <div class="header-controls">
+            <button class="nav-link-btn active-nav" id="btnHomeNav" onclick="showHomePage()">
+                <i class="fa-solid fa-house"></i> <span id="navHomeText">Home</span>
+            </button>
+            <button class="nav-link-btn" id="btnAboutNav" onclick="showAboutPage()">
+                <i class="fa-solid fa-circle-info"></i> <span id="navAboutText">About Us</span>
+            </button>
+            <button class="nav-link-btn" id="btnContactNav" onclick="showContactPage()">
+                <i class="fa-solid fa-headset"></i> <span id="navContactText">Contact Us</span>
+            </button>
 
-        <div class="card">
-            <h2><i class="fa-solid fa-pen-to-square"></i> تفاصيل الرحلة المختارة</h2>
-            <div class="form-group">
-                <label>عنوان الرحلة (بالعربية):</label>
-                <input type="text" id="tripTitleAr">
-            </div>
-            <div class="form-group">
-                <label>عنوان الرحلة (بالإنجليزية):</label>
-                <input type="text" id="tripTitleEn">
-            </div>
-            <div class="form-group">
-                <label>السعر (باليورو €):</label>
-                <input type="number" id="tripPrice">
-            </div>
-            <div class="form-group">
-                <label>وصف الرحلة المختصر:</label>
-                <textarea id="tripDesc" rows="3"></textarea>
-            </div>
-            <div class="form-group">
-                <label><i class="fa-solid fa-image"></i> رفع صورة جديدة للرحلة من الجهاز:</label>
-                <div class="file-input-box" onclick="document.getElementById('tripImageFile').click()">
-                    <i class="fa-solid fa-cloud-arrow-up" style="font-size: 24px; color: var(--gold-primary); margin-bottom: 5px;"></i>
-                    <p style="font-size: 12px; color: var(--text-sub);">اضغط هنا لاختيار صورة من جهازك</p>
-                    <input type="file" id="tripImageFile" accept="image/*" onchange="previewImage(event)">
-                </div>
-                <div id="imagePreviewContainer"></div>
-            </div>
+            <select class="select-pill" id="currencySelector" onchange="changeCurrency(this.value)">
+                <option value="EUR">€ EUR</option>
+                <option value="USD">$ USD</option>
+                <option value="GBP">£ GBP</option>
+                <option value="EGP">EGP جنيه</option>
+            </select>
 
-            <div class="actions-bar">
-                <button class="btn" onclick="saveChanges()"><i class="fa-solid fa-floppy-disk"></i> حفظ وتحديث البيانات محلياً</button>
+            <select class="select-pill" id="langSelector" onchange="changeLanguage(this.value)">
+                <option value="en">English</option>
+                <option value="de">Deutsch</option>
+                <option value="it">Italiano</option>
+                <option value="ru">Русский</option>
+                <option value="ar">العربية</option>
+            </select>
+
+            <a href="https://wa.me/201031688172" class="header-action-btn" target="_blank">
+                <i class="fa-brands fa-whatsapp"></i> <span id="navActionText">Book Now</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- MAIN HOME PAGE VIEW CONTAINER -->
+    <div id="homePageView">
+        <section class="hero">
+            <div class="hero-badge" data-aos="fade-down"><i class="fa-solid fa-crown"></i> <span id="heroBadgeText">RED SEA EXCLUSIVE EXCURSIONS</span></div>
+            <h1 id="heroTitle" data-aos="zoom-in" data-aos-delay="100">Unrivaled Marine Elegance in Hurghada</h1>
+            <p id="heroDesc" data-aos="fade-up" data-aos-delay="200">Private speedboats, pristine island escapes, luxury diving, and tailor-made VIP yacht charters on the crystalline waters of the Red Sea.</p>
+            
+            <div class="hero-trust-pills" data-aos="fade-up" data-aos-delay="300">
+                <div class="trust-pill"><i class="fa-solid fa-circle-check"></i> <span id="trust1">Guaranteed Quality & Safety</span></div>
+                <div class="trust-pill"><i class="fa-solid fa-circle-check"></i> <span id="trust2">Personalized Concierge Service</span></div>
+                <div class="trust-pill"><i class="fa-solid fa-circle-check"></i> <span id="trust3">Direct Instant Booking</span></div>
+            </div>
+        </section>
+
+        <div class="filter-tabs" data-aos="fade-up">
+            <button class="tab-btn active" id="tabAll" onclick="filterCategory('all', this)">All Trips</button>
+            <button class="tab-btn" id="tabIslands" onclick="filterCategory('islands', this)">Island Tours</button>
+            <button class="tab-btn" id="tabSpeedboat" onclick="filterCategory('speedboat', this)">Speedboats</button>
+            <button class="tab-btn" id="tabDiving" onclick="filterCategory('diving', this)">Diving & Snorkeling</button>
+            <button class="tab-btn" id="tabSafari" onclick="filterCategory('safari', this)">Desert Safari</button>
+        </div>
+
+        <div class="container">
+            <div class="trips-grid" id="tripsGridContainer"></div>
+        </div>
+    </div>
+
+    <!-- ABOUT US PAGE VIEW -->
+    <div id="aboutPageView">
+        <div class="page-banner" data-aos="fade-down">
+            <div class="hero-badge"><i class="fa-solid fa-gem"></i> <span id="abBadge">DISCOVER OUR STORY</span></div>
+            <h1 id="abTitle">About Zafiro Sea</h1>
+        </div>
+        <div class="about-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:40px; align-items:center; margin-bottom:50px;">
+            <div data-aos="fade-right">
+                <h2 id="aboutHead" style="font-family:'Playfair Display',serif; font-size:26px; color:var(--gold-light); margin-bottom:15px;">About Zafiro Sea Tourism Company</h2>
+                <p id="aboutP1" style="font-size:14px; color:var(--text-sub); line-height:1.75; margin-bottom:14px;">Zafiro Sea Tourism Company is a premier travel and tourism company based in Hurghada, Egypt, dedicated to creating unforgettable experiences across the breathtaking Red Sea.</p>
+                <button class="nav-link-btn" style="margin-top:15px;" onclick="showHomePage()">
+                    <i class="fa-solid fa-compass"></i> <span id="abBtnBack">Back To All Excursions</span>
+                </button>
+            </div>
+            <div data-aos="fade-left">
+                <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1200" alt="Boat" style="width:100%; border-radius:20px; border:1.5px solid var(--glass-border);">
             </div>
         </div>
     </div>
 
+    <!-- CONTACT US PAGE VIEW -->
+    <div id="contactPageView">
+        <div class="page-banner" data-aos="fade-down">
+            <div class="hero-badge"><i class="fa-solid fa-headset"></i> <span id="ctBadge">GET IN TOUCH WITH US</span></div>
+            <h1 id="ctTitle">Contact Zafiro Sea</h1>
+        </div>
+        <div style="text-align: center; font-size: 16px; color: var(--text-sub); padding: 40px;">
+            <p><i class="fa-solid fa-location-dot" style="color:var(--gold-primary)"></i> Bank Residences, Apartment 201, Third Floor, Al Fayrouz, Hurghada, Red Sea, Egypt</p>
+            <p style="margin-top: 15px;"><i class="fa-brands fa-whatsapp" style="color:#25d366"></i> WhatsApp: <a href="https://wa.me/201031688172" target="_blank" style="color:var(--gold-primary)">+20 10 31688 172</a></p>
+        </div>
+    </div>
+
+    <!-- ADMIN PANEL DASHBOARD VIEW (LOCAL) -->
+    <div id="adminPageView">
+        <div class="page-banner">
+            <div class="hero-badge"><i class="fa-solid fa-gears"></i> <span>لوحة التحكم المحلية</span></div>
+            <h1>إدارة الرحلات والأسعار والصور</h1>
+        </div>
+
+        <div class="admin-card">
+            <h2><i class="fa-solid fa-list-check"></i> اختر الرحلة للتعديل</h2>
+            <div class="form-group">
+                <label>اختر الرحلة:</label>
+                <select id="adminTripSelect" onchange="loadAdminTripForm()">
+                    <!-- يتم تعبئتها أوتوماتيكياً -->
+                </select>
+            </div>
+        </div>
+
+        <div class="admin-card">
+            <h2><i class="fa-solid fa-pen-to-square"></i> تفاصيل الرحلة المختارة</h2>
+            <div class="form-group">
+                <label>اسم الرحلة (بالإنجليزية):</label>
+                <input type="text" id="adminTitleEn">
+            </div>
+            <div class="form-group">
+                <label>اسم الرحلة (بالعربية):</label>
+                <input type="text" id="adminTitleAr">
+            </div>
+            <div class="form-group">
+                <label>السعر (باليورو €):</label>
+                <input type="number" id="adminPrice">
+            </div>
+            <div class="form-group">
+                <label>الوصف المختصر:</label>
+                <textarea id="adminDesc" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label><i class="fa-solid fa-images"></i> رفع صور جديدة من الجهاز (الموبايل أو اللابتوب):</label>
+                <div class="file-upload-box" onclick="document.getElementById('adminImageFiles').click()">
+                    <i class="fa-solid fa-cloud-arrow-up" style="font-size: 28px; color: var(--gold-primary); margin-bottom: 8px;"></i>
+                    <p style="font-size: 13px; color: var(--text-sub);">اضغط هنا لاختيار صور متعددة من جهازك</p>
+                    <input type="file" id="adminImageFiles" accept="image/*" multiple style="display:none;" onchange="handleAdminImagesUpload(event)">
+                </div>
+                <div id="adminImagesPreview" class="preview-thumbs-grid"></div>
+            </div>
+
+            <button class="submit-booking-btn" style="background: var(--gold-gradient); color: #02070e; margin-top: 15px;" onclick="saveAdminChanges()">
+                <i class="fa-solid fa-floppy-disk"></i> حفظ التحديثات فوراً وتطبيقها على الموقع
+            </button>
+        </div>
+    </div>
+
+    <!-- Detail Modal -->
+    <div class="modal-overlay" id="detailModal">
+        <div class="detail-modal">
+            <div class="modal-header">
+                <h3 id="dtHeader">Trip Details</h3>
+                <button class="close-modal" onclick="closeDetailModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-gallery-container">
+                    <img id="dtMainViewImg" class="modal-main-view-img" src="" alt="Trip Photo">
+                    <div id="dtThumbsGrid" class="modal-thumbs-grid"></div>
+                </div>
+                <h2 id="dtTitle" class="detail-title"></h2>
+                <div id="dtPrice" class="detail-price"></div>
+                <p id="dtDesc" class="detail-text"></p>
+                <div class="detail-grid-info">
+                    <div class="detail-box-pane">
+                        <div class="detail-section-heading"><i class="fa-solid fa-list-check"></i> <span id="lblProg">Program Highlights</span></div>
+                        <ul id="dtHighlights" class="detail-list"></ul>
+                    </div>
+                    <div class="detail-box-pane">
+                        <div class="detail-section-heading"><i class="fa-solid fa-utensils"></i> <span id="lblInc">Inclusions & Menu</span></div>
+                        <ul id="dtIncludes" class="detail-list"></ul>
+                    </div>
+                </div>
+                <button id="dtBookBtn" class="submit-booking-btn" style="margin-top:25px;">
+                    <i class="fa-brands fa-whatsapp"></i> <span id="btnModalBook">Proceed to Quick Booking Now</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div class="modal-overlay" id="bookingModal">
+        <div class="booking-modal">
+            <div class="modal-header">
+                <h3 id="modalTripTitle">Book Excursion</h3>
+                <button class="close-modal" onclick="closeBookingModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="bookingForm" onsubmit="sendBookingWhatsApp(event)">
+                    <div class="form-grid">
+                        <div class="form-group form-group-full">
+                            <label>Full Name</label>
+                            <input type="text" id="custName" required placeholder="John Doe">
+                        </div>
+                        <div class="form-group">
+                            <label>Hotel Name</label>
+                            <input type="text" id="custHotel" required placeholder="Steigenberger">
+                        </div>
+                        <div class="form-group">
+                            <label>Room Number</label>
+                            <input type="text" id="custRoom" placeholder="102">
+                        </div>
+                        <div class="form-group form-group-full">
+                            <label>Excursion Date</label>
+                            <input type="date" id="custDate" required>
+                        </div>
+                    </div>
+                    <div class="counter-section-title">Guests Breakdown</div>
+                    <div class="counter-grid">
+                        <div class="counter-box">
+                            <label>Adults</label>
+                            <input type="number" id="cntAdults" value="1" min="1" onchange="calculateTotal()">
+                        </div>
+                        <div class="counter-box">
+                            <label>Kids > 10 (50%)</label>
+                            <input type="number" id="cntKids10" value="0" min="0" onchange="calculateTotal()">
+                        </div>
+                        <div class="counter-box">
+                            <label>Kids < 10 (FREE)</label>
+                            <input type="number" id="cntKidsFree" value="0" min="0" onchange="calculateTotal()">
+                        </div>
+                    </div>
+                    <div class="price-summary">
+                        <span class="price-summary-text">Total Estimated Price:</span>
+                        <span class="price-summary-total" id="calculatedTotal">€35</span>
+                    </div>
+                    <button type="submit" class="submit-booking-btn">
+                        <i class="fa-brands fa-whatsapp"></i> Confirm Booking on WhatsApp
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- LIGHTBOX -->
+    <div id="lightboxOverlay" class="lightbox-overlay">
+        <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+        <button class="lightbox-nav lightbox-prev" onclick="navigateLightbox(1)">&#10095;</button>
+        <img id="lightboxImg" class="lightbox-content" src="" alt="Zoomed Photo">
+        <button class="lightbox-nav lightbox-next" onclick="navigateLightbox(-1)">&#10094;</button>
+    </div>
+
+    <!-- FLOATING BUTTONS (HELP & ADMIN PANEL) -->
+    <div class="floating-buttons-wrap">
+        <button class="admin-pill-btn" onclick="toggleAdminView()">
+            <i class="fa-solid fa-gauge-high"></i> لوحة التحكم ⚙️
+        </button>
+        <button class="help-pill-btn" onclick="toggleAIChat()">
+            <i class="fa-solid fa-headset"></i> Help 💬
+        </button>
+    </div>
+
+    <!-- AI CHAT -->
+    <div class="ai-chat-window" id="aiChatWindow">
+        <div class="ai-chat-header">
+            <h4><i class="fa-solid fa-sparkles"></i> ZAFIRO Sea Concierge</h4>
+            <i class="fa-solid fa-xmark" onclick="toggleAIChat()" style="cursor:pointer; color:#fff; font-size: 18px;"></i>
+        </div>
+        <div class="ai-chat-body" id="aiChatBody">
+            <div class="chat-msg bot">👋 Hello! Welcome to ZAFIRO SEA. How can I help you today?</div>
+        </div>
+        <div class="ai-chat-footer">
+            <input type="text" id="aiInput" placeholder="Type your message..." onkeypress="handleAIPress(event)">
+            <button onclick="sendAIMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="site-footer-premium">
+        <div class="footer-container">
+            <div class="footer-col">
+                <div class="footer-brand-logo">
+                    <i class="fa-solid fa-gem"></i>
+                    <span class="footer-brand-title">ZAFIRO SEA</span>
+                </div>
+                <p class="footer-about-text">Zafiro Sea Tourism Company is a premier travel and tourism company based in Hurghada, Egypt, dedicated to creating unforgettable experiences across the breathtaking Red Sea.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Contact Us</h3>
+                <ul class="footer-contact-list">
+                    <li><i class="fa-solid fa-location-dot"></i> Bank Residences, Hurghada</li>
+                    <li><i class="fa-brands fa-whatsapp"></i> <a href="https://wa.me/201031688172" target="_blank">+20 10 31688 172</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 ZAFIRO SEA Tourism Company. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
-        // بيانات تجريبية تفاعلية للوحة التحكم
-        function loadTripData() {
-            const select = document.getElementById('tripSelector').value;
-            // هنا يتم جلب البيانات لعرضها في الحقول لتعديلها بسهولة
-            document.getElementById('tripTitleAr').value = "رحلة بحرية في البحر الأحمر";
-            document.getElementById('tripTitleEn').value = "Red Sea Excursion";
-            document.getElementById('tripPrice').value = "35";
-            document.getElementById('tripDesc').value = "استمتع بأروع الرحلات البحرية في الغردقة.";
-            document.getElementById('imagePreviewContainer').innerHTML = "";
+        let currentView = 'home';
+        let currentCurrency = 'EUR';
+        let currencyRates = { 'EUR': 1, 'USD': 1.08, 'GBP': 0.85, 'EGP': 55 };
+        let currencySymbols = { 'EUR': '€', 'USD': '$', 'GBP': '£', 'EGP': 'EGP ' };
+        let currentLang = 'en';
+        const officialWhatsAppNumber = "201031688172";
+
+        // قاعدة بيانات الرحلات الأساسية
+        let defaultTripData = {
+            'daily-diving': {
+                category: 'diving', priceEUR: 50,
+                images: ['https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1200'],
+                en: { title: 'Certified Daily Diving', desc: 'Certified Daily Diving Trip - International Guests.', highlights: ['Hotel Pick-up', 'Sailing'], includes: ['Tanks & Weights'] },
+                ar: { title: 'رحلة الغوص اليومي للمحترفين', desc: 'رحلة غوص يومية معتمدة للضيوف الدوليين.', highlights: ['الاستقبال من الفندق', 'الإبحار'], includes: ['الأسطوانات والأوزان'] }
+            },
+            'hula-hula': {
+                category: 'islands', priceEUR: 30,
+                images: ['https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200'],
+                en: { title: 'Hula Hula Island', desc: 'Relax on the pristine white sands.', highlights: ['VIP Pick-up', 'Snorkeling'], includes: ['Buffet Lunch'] },
+                ar: { title: 'جزيرة هولا هولا', desc: 'استرخِ على الرمال البيضاء النخبة.', highlights: ['استقبال VIP', 'سنوركلينج'], includes: ['بوفيه الغداء'] }
+            },
+            'magawish': {
+                category: 'islands', priceEUR: 25,
+                images: ['https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?q=80&w=1200'],
+                en: { title: 'Magawish Island', desc: 'Explore Magawish pristine shores.', highlights: ['Island Tour', 'Snorkel'], includes: ['Lunch & Drinks'] },
+                ar: { title: 'جزيرة مجاويش', desc: 'استكشف شواطئ جزيرة مجاويش البكر.', highlights: ['جولة الجزيرة', 'سنوركلينج'], includes: ['الغداء والمشروبات'] }
+            },
+            'speedboat': {
+                category: 'speedboat', priceEUR: 150,
+                images: ['https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1200'],
+                en: { title: 'Private Speedboat', desc: 'Reach Dolphin House with privacy.', highlights: ['Private Boat', 'Dolphins'], includes: ['Soft Drinks'] },
+                ar: { title: 'سبيد بوت خاص', desc: 'انطلق لبيت الدلافين بخصوصية تامة.', highlights: ['قارب خاص', 'دلافين'], includes: ['مشروبات غازية'] }
+            }
+        };
+
+        // استرجاع البيانات المحفوظة محلياً إن وجدت
+        let tripDetailsData = JSON.parse(localStorage.getItem('zafiro_trips')) || defaultTripData;
+
+        function saveToLocal() {
+            localStorage.setItem('zafiro_trips', JSON.stringify(tripDetailsData));
         }
 
-        function previewImage(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('imagePreviewContainer').innerHTML = `<img src="${e.target.result}" class="preview-img" alt="معاينة الصورة">`;
-                }
-                reader.readAsDataURL(file);
+        function renderTrips() {
+            const container = document.getElementById('tripsGridContainer');
+            if(!container) return;
+            container.innerHTML = '';
+            for (const [key, tripObj] of Object.entries(tripDetailsData)) {
+                const trip = tripObj[currentLang] || tripObj['en'];
+                container.innerHTML += `
+                    <div class="trip-card" data-category="${tripObj.category}" onclick="openDetailModal('${key}')">
+                        <div class="media-carousel">
+                            <div class="carousel-track"><div class="carousel-slide"><img src="${tripObj.images[0]}" alt="${trip.title}"></div></div>
+                        </div>
+                        <div class="trip-content">
+                            <div class="trip-title">${trip.title}</div>
+                            <div class="trip-desc">${trip.desc}</div>
+                            <div class="trip-footer">
+                                <div class="price-amount">${getConvertedPrice(tripObj.priceEUR)}</div>
+                                <button class="book-btn" onclick="event.stopPropagation(); openBookingModal('${key}', ${tripObj.priceEUR})">
+                                    <i class="fa-brands fa-whatsapp"></i> Book
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
             }
         }
 
-        function saveChanges() {
-            alert("تم حفظ التعديلات بنجاح على جهازك محلياً!");
+        function getConvertedPrice(priceEUR) {
+            return `${currencySymbols[currentCurrency]}${Math.round(priceEUR * currencyRates[currentCurrency])}`;
         }
 
-        window.onload = loadTripData;
+        function filterCategory(category, btn) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.trip-card').forEach(card => {
+                card.style.display = (category === 'all' || card.getAttribute('data-category') === category) ? 'flex' : 'none';
+            });
+        }
+
+        function changeCurrency(val) { currentCurrency = val; renderTrips(); }
+        function changeLanguage(lang) { currentLang = lang; renderTrips(); }
+
+        function showHomePage() {
+            currentView = 'home';
+            document.getElementById('homePageView').style.display = 'block';
+            document.getElementById('aboutPageView').style.display = 'none';
+            document.getElementById('contactPageView').style.display = 'none';
+            document.getElementById('adminPageView').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+        function showAboutPage() {
+            currentView = 'about';
+            document.getElementById('homePageView').style.display = 'none';
+            document.getElementById('aboutPageView').style.display = 'block';
+            document.getElementById('contactPageView').style.display = 'none';
+            document.getElementById('adminPageView').style.display = 'none';
+        }
+        function showContactPage() {
+            currentView = 'contact';
+            document.getElementById('homePageView').style.display = 'none';
+            document.getElementById('aboutPageView').style.display = 'none';
+            document.getElementById('contactPageView').style.display = 'block';
+            document.getElementById('adminPageView').style.display = 'none';
+        }
+
+        // لوحة التحكم المحلية
+        function toggleAdminView() {
+            const adminView = document.getElementById('adminPageView');
+            if (adminView.style.display === 'block') {
+                showHomePage();
+            } else {
+                document.getElementById('homePageView').style.display = 'none';
+                document.getElementById('aboutPageView').style.display = 'none';
+                document.getElementById('contactPageView').style.display = 'none';
+                adminView.style.display = 'block';
+                populateAdminSelect();
+            }
+        }
+
+        function populateAdminSelect() {
+            const select = document.getElementById('adminTripSelect');
+            select.innerHTML = '';
+            for (const [key, tripObj] of Object.entries(tripDetailsData)) {
+                select.innerHTML += `<option value="${key}">${tripObj.en.title} (${key})</option>`;
+            }
+            loadAdminTripForm();
+        }
+
+        let tempUploadedImages = [];
+        function loadAdminTripForm() {
+            const key = document.getElementById('adminTripSelect').value;
+            const trip = tripDetailsData[key];
+            if(!trip) return;
+            document.getElementById('adminTitleEn').value = trip.en.title;
+            document.getElementById('adminTitleAr').value = trip.ar.title;
+            document.getElementById('adminPrice').value = trip.priceEUR;
+            document.getElementById('adminDesc').value = trip.en.desc;
+            tempUploadedImages = [...trip.images];
+            renderAdminImagesPreview();
+        }
+
+        function handleAdminImagesUpload(e) {
+            const files = e.target.files;
+            for (let i = 0; i < files.length; i++) {
+                const reader = new FileReader();
+                reader.onload = function(uploadEvent) {
+                    tempUploadedImages.push(uploadEvent.target.result);
+                    renderAdminImagesPreview();
+                }
+                reader.readAsDataURL(files[i]);
+            }
+        }
+
+        function renderAdminImagesPreview() {
+            const container = document.getElementById('adminImagesPreview');
+            container.innerHTML = '';
+            tempUploadedImages.forEach((imgSrc, idx) => {
+                container.innerHTML += `<img src="${imgSrc}" alt="preview">`;
+            });
+        }
+
+        function saveAdminChanges() {
+            const key = document.getElementById('adminTripSelect').value;
+            if(!tripDetailsData[key]) return;
+            tripDetailsData[key].en.title = document.getElementById('adminTitleEn').value;
+            tripDetailsData[key].ar.title = document.getElementById('adminTitleAr').value;
+            tripDetailsData[key].priceEUR = parseFloat(document.getElementById('adminPrice').value) || 0;
+            tripDetailsData[key].en.desc = document.getElementById('adminDesc').value;
+            if(tempUploadedImages.length > 0) {
+                tripDetailsData[key].images = [...tempUploadedImages];
+            }
+            saveToLocal();
+            alert("تم حفظ التعديلات وتحديث الموقع بنجاح على جهازك!");
+            showHomePage();
+            renderTrips();
+        }
+
+        function openDetailModal(tripKey) {
+            const tripObj = tripDetailsData[tripKey];
+            const trip = tripObj[currentLang] || tripObj['en'];
+            document.getElementById('dtHeader').innerText = trip.title;
+            document.getElementById('dtTitle').innerText = trip.title;
+            document.getElementById('dtPrice').innerText = getConvertedPrice(tripObj.priceEUR);
+            
+            const mainImg = document.getElementById('dtMainViewImg');
+            mainImg.src = tripObj.images[0];
+            
+            const thumbs = document.getElementById('dtThumbsGrid');
+            thumbs.innerHTML = '';
+            tripObj.images.forEach((img, idx) => {
+                thumbs.innerHTML += `<img src="${img}" class="${idx===0?'active-thumb':''}" onclick="document.getElementById('dtMainViewImg').src='${img}'">`;
+            });
+
+            document.getElementById('dtDesc').innerText = trip.desc;
+            document.getElementById('detailModal').classList.add('active');
+        }
+        function closeDetailModal() { document.getElementById('detailModal').classList.remove('active'); }
+
+        let currentTripName = '', currentTripBasePriceEUR = 0;
+        function openBookingModal(tripKey, price) {
+            currentTripName = tripDetailsData[tripKey].en.title;
+            currentTripBasePriceEUR = price;
+            document.getElementById('modalTripTitle').innerText = `Book: ${currentTripName}`;
+            document.getElementById('bookingModal').classList.add('active');
+            calculateTotal();
+        }
+        function closeBookingModal() { document.getElementById('bookingModal').classList.remove('active'); }
+        function calculateTotal() {
+            const adults = parseInt(document.getElementById('cntAdults').value) || 1;
+            const kids = parseInt(document.getElementById('cntKids10').value) || 0;
+            const total = (adults * currentTripBasePriceEUR) + (kids * currentTripBasePriceEUR * 0.5);
+            document.getElementById('calculatedTotal').innerText = getConvertedPrice(total);
+        }
+        function sendBookingWhatsApp(e) {
+            e.preventDefault();
+            const name = document.getElementById('custName').value;
+            const hotel = document.getElementById('custHotel').value;
+            const total = document.getElementById('calculatedTotal').innerText;
+            const msg = `Booking: ${currentTripName}\nName: ${name}\nHotel: ${hotel}\nTotal: ${total}`;
+            window.open(`https://wa.me/${officialWhatsAppNumber}?text=${encodeURIComponent(msg)}`, '_blank');
+            closeBookingModal();
+        }
+
+        function toggleAIChat() {
+            const win = document.getElementById('aiChatWindow');
+            win.style.display = (win.style.display === 'flex') ? 'none' : 'flex';
+        }
+        function sendAIMessage() {
+            const input = document.getElementById('aiInput');
+            if(!input.value.trim()) return;
+            document.getElementById('aiChatBody').innerHTML += `<div class="chat-msg user">${input.value}</div>`;
+            input.value = '';
+            setTimeout(() => {
+                document.getElementById('aiChatBody').innerHTML += `<div class="chat-msg bot">Hello! How can I help you with your Hurghada tour?</div>`;
+            }, 400);
+        }
+
+        window.onload = function() {
+            renderTrips();
+            AOS.init({ duration: 800, once: true });
+        };
     </script>
 </body>
 </html>
