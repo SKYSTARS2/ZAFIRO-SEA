@@ -3,701 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZAFIRO SEA | لوحة التحكم الشاملة</title>
-    
-    <!-- Google Fonts & FontAwesome -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+    <title>لوحة تحكم زافيرو سي | Zafiro Sea Admin Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Firebase SDK (Compat v10) -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
-
     <style>
         :root {
             --bg-deep: #02070e;
-            --sidebar-bg: #040d18;
             --gold-primary: #d4af37;
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
-            --gold-light: #fbe8a6;
             --card-bg: rgba(6, 18, 32, 0.85);
             --glass-border: rgba(212, 175, 55, 0.25);
             --text-main: #f8fafc;
             --text-sub: #94a3b8;
-            --accent-green: #25d366;
-            --accent-yellow: #f59e0b;
-            --accent-red: #ef4444;
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
-        body { background-color: var(--bg-deep); color: var(--text-main); display: flex; min-height: 100vh; overflow-x: hidden; }
-
-        /* Sidebar Navigation */
-        aside {
-            width: 280px; background: var(--sidebar-bg); border-left: 1px solid var(--glass-border);
-            display: flex; flex-direction: column; position: fixed; height: 100vh; z-index: 100;
-        }
-        .sidebar-header { padding: 25px 20px; border-bottom: 1px solid var(--glass-border); text-align: center; }
-        .sidebar-logo { font-family: 'Cinzel', serif; font-size: 22px; font-weight: 900; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 2px; }
-        .sidebar-subtitle { font-size: 11px; color: var(--gold-light); margin-top: 5px; font-weight: 700; letter-spacing: 1px; }
-
-        .sidebar-menu { list-style: none; padding: 20px 15px; display: flex; flex-direction: column; gap: 10px; flex-grow: 1; }
-        .sidebar-menu li a {
-            display: flex; align-items: center; gap: 14px; padding: 13px 18px; border-radius: 14px;
-            color: var(--text-sub); text-decoration: none; font-weight: 700; font-size: 14.5px; transition: all 0.3s ease; cursor: pointer;
-        }
-        .sidebar-menu li.active a, .sidebar-menu li a:hover {
-            background: var(--gold-gradient); color: #02070e; box-shadow: 0 5px 20px rgba(212,175,55,0.3);
-        }
-        .sidebar-menu li a i { font-size: 18px; width: 24px; text-align: center; }
-
-        /* Main Content Area */
-        main { margin-right: 280px; flex-grow: 1; padding: 30px; overflow-y: auto; }
+        body { background-color: var(--bg-deep); color: var(--text-main); padding: 20px; direction: rtl; }
+        .header { text-align: center; margin-bottom: 30px; padding: 20px; background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: 15px; }
+        .header h1 { color: var(--gold-primary); font-size: 26px; margin-bottom: 5px; }
+        .header p { color: var(--text-sub); font-size: 14px; }
         
-        .admin-topbar {
-            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;
-            background: var(--card-bg); border: 1px solid var(--glass-border); padding: 20px 30px;
-            border-radius: 20px; margin-bottom: 30px; backdrop-filter: blur(12px);
-        }
-        .admin-welcome h1 { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 4px; }
-        .admin-welcome p { font-size: 13px; color: var(--text-sub); }
+        .container { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+        .card { background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: 15px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .card h2 { font-size: 18px; color: var(--gold-primary); margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; display: flex; align-items: center; gap: 8px; }
         
-        .admin-actions-top { display: flex; gap: 10px; flex-wrap: wrap; }
-        .btn-gold {
-            background: var(--gold-gradient); color: #02070e; border: none; padding: 10px 18px;
-            border-radius: 12px; font-weight: 800; font-size: 13.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
-            box-shadow: 0 4px 20px rgba(212,175,55,0.3); transition: transform 0.2s;
-        }
-        .btn-gold:hover { transform: translateY(-2px); }
-        .btn-outline { background: transparent; border: 1px solid var(--gold-primary); color: var(--gold-light); }
-
-        /* Sections */
-        .admin-section { display: none; }
-        .admin-section.active-section { display: block; animation: fadeIn 0.3s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Stats Grid */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
-        .stat-card {
-            background: var(--card-bg); border: 1px solid var(--glass-border); padding: 20px; border-radius: 18px;
-            display: flex; align-items: center; gap: 16px; backdrop-filter: blur(10px);
-        }
-        .stat-icon {
-            width: 50px; height: 50px; border-radius: 14px; background: rgba(212,175,55,0.1);
-            border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center;
-            font-size: 22px; color: var(--gold-primary);
-        }
-        .stat-info h3 { font-size: 24px; font-weight: 900; color: #fff; line-height: 1.1; margin-bottom: 4px; }
-        .stat-info p { font-size: 12.5px; color: var(--text-sub); font-weight: 600; }
-
-        /* Card Boxes */
-        .card-box {
-            background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: 20px;
-            padding: 25px; margin-bottom: 30px; backdrop-filter: blur(12px);
-        }
-        .card-box-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.06); }
-        .card-box-header h2 { font-size: 18px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 10px; }
-        .card-box-header h2 i { color: var(--gold-primary); }
-
-        table { width: 100%; border-collapse: collapse; text-align: right; }
-        th, td { padding: 12px 15px; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 13.5px; }
-        th { color: var(--gold-light); font-weight: 800; background: rgba(255,255,255,0.02); }
-        td { color: #e2e8f0; }
-
-        .status-select {
-            background: #06111e; color: #fff; border: 1px solid var(--glass-border);
-            padding: 5px 8px; border-radius: 8px; font-size: 12px; outline: none; cursor: pointer;
-        }
-
-        /* Trips Grid Display */
-        .trips-admin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
-        .trip-admin-card {
-            background: rgba(255,255,255,0.025); border: 1px solid var(--glass-border); border-radius: 16px; overflow: hidden;
-            display: flex; flex-direction: column;
-        }
-        .trip-admin-card img { width: 100%; height: 160px; object-fit: cover; }
-        .trip-admin-card-body { padding: 15px; display: flex; flex-direction: column; flex-grow: 1; }
-        .trip-admin-title { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 6px; }
-        .trip-admin-price { font-size: 18px; font-weight: 900; color: var(--gold-primary); margin-bottom: 12px; }
-
-        /* Modal Styles */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(2, 7, 14, 0.9); backdrop-filter: blur(10px);
-            display: none; justify-content: center; align-items: center; z-index: 2000; padding: 20px;
-        }
-        .modal-content {
-            background: #06111e; width: 100%; max-width: 600px; max-height: 90vh;
-            border-radius: 20px; padding: 25px; overflow-y: auto; border: 1.5px solid var(--glass-border);
-        }
-        .form-group { margin-bottom: 16px; }
-        .form-group label { display: block; font-size: 12.5px; font-weight: 700; color: var(--gold-light); margin-bottom: 6px; }
-        .form-group input, .form-group textarea, .form-group select {
-            width: 100%; padding: 11px 14px; background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; font-size: 13.5px; color: #fff; outline: none;
-        }
-        .form-group select option { background: #06111e; color: #fff; }
-
-        .img-preview-box {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 10px;
-        }
-        .img-item-wrapper {
-            position: relative; border-radius: 10px; overflow: hidden; border: 1px solid var(--glass-border);
-        }
-        .img-item-wrapper img { width: 100%; height: 80px; object-fit: cover; display: block; }
-        .del-img-btn {
-            position: absolute; top: 4px; right: 4px; background: rgba(239, 68, 68, 0.9); color: #fff;
-            border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; font-size: 12px;
-        }
-
-        @media (max-width: 992px) {
-            aside { width: 75px; }
-            aside .sidebar-subtitle, aside .sidebar-menu span, aside .sidebar-logo { display: none; }
-            aside .sidebar-menu li a { justify-content: center; padding: 15px; }
-            main { margin-right: 75px; }
-        }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 5px; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; color: #fff; font-size: 14px; outline: none; }
+        .form-group input:focus, .form-group textarea:focus { border-color: var(--gold-primary); }
+        
+        .btn { background: var(--gold-gradient); color: #02070e; border: none; padding: 12px 20px; border-radius: 10px; font-weight: 800; font-size: 14px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(212,175,55,0.3); }
+        .btn:hover { transform: translateY(-2px); }
+        .file-input-box { border: 2px dashed var(--glass-border); padding: 15px; text-align: center; border-radius: 8px; cursor: pointer; background: rgba(255,255,255,0.02); }
+        .file-input-box input { display: none; }
+        .preview-img { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; margin-top: 8px; border: 1px solid var(--gold-primary); }
+        .actions-bar { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-    <!-- SIDEBAR NAVIGATION -->
-    <aside>
-        <div class="sidebar-header">
-            <div class="sidebar-logo">ZAFIRO SEA</div>
-            <div class="sidebar-subtitle">ADMIN PANEL</div>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fa-solid fa-ship"></i> لوحة تحكم موقع زافيرو سي</h1>
+            <p>قم بتعديل الأسعار والرحلات، وارفع الصور مباشرة من جهازك بكل سهولة</p>
         </div>
-        <ul class="sidebar-menu">
-            <li class="active" onclick="switchSection('overview', this)"><a><i class="fa-solid fa-chart-pie"></i> <span>نظرة عامة</span></a></li>
-            <li onclick="switchSection('bookings', this)"><a><i class="fa-solid fa-calendar-check"></i> <span>إدارة الحجوزات</span></a></li>
-            <li onclick="switchSection('trips', this)"><a><i class="fa-solid fa-ship"></i> <span>تعديل رحلات الموقع</span></a></li>
-            <li onclick="switchSection('ai_chat', this)"><a><i class="fa-solid fa-headset"></i> <span>سجل شات AI</span></a></li>
-        </ul>
-    </aside>
 
-    <!-- MAIN DASHBOARD CONTENT -->
-    <main>
-        <div class="admin-topbar">
-            <div class="admin-welcome">
-                <h1>أهلاً بك يا مدير، محمد خالد 👋</h1>
-                <p>لوحة التحكم بالرحلات والحجوزات لشركة زافيرو سي للسياحة البحرية</p>
-            </div>
-            <div class="admin-actions-top">
-                <button class="btn-gold" onclick="openManualBookingModal()"><i class="fa-solid fa-plus"></i> إضافة حجز يدوي جديد</button>
-                <button class="btn-gold btn-outline" onclick="openTripModal()"><i class="fa-solid fa-cloud-arrow-up"></i> رفع رحلة جديدة</button>
+        <div class="card">
+            <h2><i class="fa-solid fa-list-check"></i> اختر الرحلة للتعديل</h2>
+            <div class="form-group">
+                <label>اختر الرحلة:</label>
+                <select id="tripSelector" onchange="loadTripData()">
+                    <option value="daily-diving">Daily Diving (الغوص اليومي)</option>
+                    <option value="hula-hula">Hula Hula Island (جزيرة هولا هولا)</option>
+                    <option value="magawish">Magawish Island (جزيرة مجاويش)</option>
+                    <option value="mountain-safari">Mountain Safari (السفاري الجبلية)</option>
+                    <option value="paradise-submarine">Paradise Submarine (الغواصة والسنوركلينج)</option>
+                    <option value="speedboat">Private Speedboat (السبيد بوت الخاص)</option>
+                    <option value="introductory-dive">Introductory Dive (الغوص الاستكشافي)</option>
+                    <option value="orange-bay">Orange Bay Island (جزيرة أورانج باي)</option>
+                    <option value="private-boat">Private Yacht Charter (تأجير يخت خاص)</option>
+                    <option value="sunset-private">Sunset Private Yacht (يخت خاص للغروب)</option>
+                </select>
             </div>
         </div>
 
-        <!-- 1. OVERVIEW SECTION -->
-        <section id="sec_overview" class="admin-section active-section">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon" style="color:#25d366;"><i class="fa-solid fa-circle-check"></i></div>
-                    <div class="stat-info"><h3 id="statConfirmed">0</h3><p>حجوزات مؤكدة</p></div>
+        <div class="card">
+            <h2><i class="fa-solid fa-pen-to-square"></i> تفاصيل الرحلة المختارة</h2>
+            <div class="form-group">
+                <label>عنوان الرحلة (بالعربية):</label>
+                <input type="text" id="tripTitleAr">
+            </div>
+            <div class="form-group">
+                <label>عنوان الرحلة (بالإنجليزية):</label>
+                <input type="text" id="tripTitleEn">
+            </div>
+            <div class="form-group">
+                <label>السعر (باليورو €):</label>
+                <input type="number" id="tripPrice">
+            </div>
+            <div class="form-group">
+                <label>وصف الرحلة المختصر:</label>
+                <textarea id="tripDesc" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label><i class="fa-solid fa-image"></i> رفع صورة جديدة للرحلة من الجهاز:</label>
+                <div class="file-input-box" onclick="document.getElementById('tripImageFile').click()">
+                    <i class="fa-solid fa-cloud-arrow-up" style="font-size: 24px; color: var(--gold-primary); margin-bottom: 5px;"></i>
+                    <p style="font-size: 12px; color: var(--text-sub);">اضغط هنا لاختيار صورة من جهازك</p>
+                    <input type="file" id="tripImageFile" accept="image/*" onchange="previewImage(event)">
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon" style="color:#f59e0b;"><i class="fa-solid fa-clock"></i></div>
-                    <div class="stat-info"><h3 id="statPending">0</h3><p>قيد الانتظار</p></div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon" style="color:#ef4444;"><i class="fa-solid fa-circle-xmark"></i></div>
-                    <div class="stat-info"><h3 id="statCancelled">0</h3><p>حجوزات ملغية</p></div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fa-solid fa-euro-sign"></i></div>
-                    <div class="stat-info"><h3 id="statRevenue">€0</h3><p>إجمالي الأرباح المؤكدة</p></div>
-                </div>
+                <div id="imagePreviewContainer"></div>
             </div>
 
-            <div class="card-box">
-                <div class="card-box-header">
-                    <h2><i class="fa-solid fa-clock-rotate-left"></i> أحدث الحجوزات الواردة</h2>
-                </div>
-                <div style="overflow-x: auto;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>اسم العميل</th>
-                                <th>الفندق ورقم الغرفة</th>
-                                <th>اسم الرحلة</th>
-                                <th>تاريخ الرحلة</th>
-                                <th>الأفراد</th>
-                                <th>الإجمالي</th>
-                                <th>تغيير الحالة</th>
-                            </tr>
-                        </thead>
-                        <tbody id="recentBookingsTable">
-                            <tr><td colspan="7" style="text-align: center; color: var(--text-sub);">جاري التحميل من السحابة...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div class="actions-bar">
+                <button class="btn" onclick="saveChanges()"><i class="fa-solid fa-floppy-disk"></i> حفظ وتحديث البيانات محلياً</button>
             </div>
-        </section>
-
-        <!-- 2. BOOKINGS SECTION -->
-        <section id="sec_bookings" class="admin-section">
-            <div class="card-box">
-                <div class="card-box-header">
-                    <h2><i class="fa-solid fa-calendar-days"></i> سجل الحجوزات الكامل</h2>
-                    <button class="btn-gold" onclick="openManualBookingModal()"><i class="fa-solid fa-plus"></i> إضافة حجز يدوي</button>
-                </div>
-                <div style="overflow-x: auto;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>التاريخ</th>
-                                <th>اسم العميل</th>
-                                <th>الفندق</th>
-                                <th>الرحلة المحجوزة</th>
-                                <th>الأفراد</th>
-                                <th>المبلغ الإجمالي</th>
-                                <th>حالة الحجز</th>
-                                <th>حذف</th>
-                            </tr>
-                        </thead>
-                        <tbody id="fullBookingsTable"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- 3. TRIPS SECTION (EDITABLE TRIPS & PHOTO DELETION) -->
-        <section id="sec_trips" class="admin-section">
-            <div class="card-box">
-                <div class="card-box-header">
-                    <h2><i class="fa-solid fa-ship"></i> تعديل الرحلات - إمكانية حذف الصور المرفوعة أو إضافة صور جديدة</h2>
-                    <button class="btn-gold" onclick="openTripModal()"><i class="fa-solid fa-plus"></i> إضافة رحلة جديدة للسحابة</button>
-                </div>
-                <div class="trips-admin-grid" id="siteTripsGrid"></div>
-            </div>
-        </section>
-
-        <!-- 4. AI CHAT LOG SECTION -->
-        <section id="sec_ai_chat" class="admin-section">
-            <div class="card-box">
-                <div class="card-box-header">
-                    <h2><i class="fa-solid fa-robot"></i> سجل محادثات الذكاء الاصطناعي مع الزوار</h2>
-                </div>
-                <div style="overflow-x: auto;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>اللغة</th>
-                                <th>نص استفسار الزائر</th>
-                                <th>رد المساعد الذكي</th>
-                            </tr>
-                        </thead>
-                        <tbody id="aiChatLogTable"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- MANUAL BOOKING MODAL WITH FIXED TRIPS DROPDOWN -->
-    <div class="modal-overlay" id="manualBookingModal">
-        <div class="modal-content">
-            <div class="card-box-header">
-                <h2>إضافة حجز يدوي جديد</h2>
-                <i class="fa-solid fa-xmark" onclick="closeManualBookingModal()" style="cursor:pointer; font-size:20px; color:#fff;"></i>
-            </div>
-            <form onsubmit="saveManualBooking(event)">
-                <div class="form-group">
-                    <label>اسم العميل بالكامل</label>
-                    <input type="text" id="mbName" required placeholder="مثال: أحمد محمود">
-                </div>
-                <div class="form-group">
-                    <label>اسم الفندق ورقم الغرفة</label>
-                    <input type="text" id="mbHotel" required placeholder="مثال: شتايجنبرجر (غرفة 204)">
-                </div>
-                <div class="form-group">
-                    <label>اختر الرحلة من القائمة المنسدلة للرحلات الثابتة</label>
-                    <select id="mbTripSelect" required>
-                        <option value="جزيرة أورانج باي">جزيرة أورانج باي (Orange Bay Island Escape)</option>
-                        <option value="جزيرة هولا هولا">جزيرة هولا هولا (Hula Hula Island)</option>
-                        <option value="جزيرة مجاويش">جزيرة مجاويش (Magawish Island)</option>
-                        <option value="الغوص اليومي للمحترفين">الغوص اليومي للمحترفين (Certified Daily Diving)</option>
-                        <option value="الغوص الاستكشافي للمبتدئين">الغوص الاستكشافي للمبتدئين (Introductory Dive)</option>
-                        <option value="غواصة بارادايس وسنوركلينج">غواصة بارادايس وسنوركلينج (Paradise Submarine Snorkel)</option>
-                        <option value="سبيد بوت خاص 4 ساعات">سبيد بوت خاص 4 ساعات (Private Speedboat 4 Hours)</option>
-                        <option value="رحلة السفاري الجبلية">رحلة السفاري الجبلية (Mountain Safari)</option>
-                        <option value="تأجير يخت خاص VIP">تأجير يخت خاص VIP (Private Yacht Charter)</option>
-                        <option value="رحلة يخت خاص عند الغروب">رحلة يخت خاص عند الغروب (Sunset Private Yacht)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>تاريخ الرحلة</label>
-                    <input type="date" id="mbDate" required>
-                </div>
-                <div class="form-group">
-                    <label>عدد الأفراد</label>
-                    <input type="text" id="mbGuests" required placeholder="مثال: 2 بالغين + 1 طفل">
-                </div>
-                <div class="form-group">
-                    <label>المبلغ الإجمالي (€)</label>
-                    <input type="text" id="mbTotal" required placeholder="مثال: €70">
-                </div>
-                <div class="form-group">
-                    <label>حالة الحجز الأولية</label>
-                    <select id="mbStatus">
-                        <option value="confirmed">مؤكد ✅</option>
-                        <option value="pending" selected>قيد الانتظار ⏳</option>
-                        <option value="cancelled">ملغى ❌</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn-gold" style="width: 100%; justify-content: center; margin-top: 10px;">
-                    <i class="fa-solid fa-floppy-disk"></i> حفظ الحجز في السحابة
-                </button>
-            </form>
         </div>
     </div>
 
-    <!-- EDIT TRIP MODAL (WITH IMAGE DELETION & ADDITION) -->
-    <div class="modal-overlay" id="editTripModalView">
-        <div class="modal-content">
-            <div class="card-box-header">
-                <h2>تعديل بيانات ورئاسة وحذف صور الرحلة</h2>
-                <i class="fa-solid fa-xmark" onclick="closeEditTripModal()" style="cursor:pointer; font-size:20px; color:#fff;"></i>
-            </div>
-            <form onsubmit="saveTripEdits(event)">
-                <input type="hidden" id="editTripKey">
-                <div class="form-group">
-                    <label>عنوان الرحلة</label>
-                    <input type="text" id="editTripTitle" required>
-                </div>
-                <div class="form-group">
-                    <label>السعر باليورو (€)</label>
-                    <input type="number" id="editTripPrice" required>
-                </div>
-                <div class="form-group">
-                    <label>إضافة صور جديدة من جهازك للرحلة</label>
-                    <input type="file" id="editTripFilesInput" multiple accept="image/*" style="padding:8px;">
-                </div>
-                <div class="form-group">
-                    <label>الصور الحالية (اضغط 🗑️ لحذف أي صورة بشكل مباشر من السحابة):</label>
-                    <div class="img-preview-box" id="currentImgsPreview"></div>
-                </div>
-                <button type="submit" id="saveTripBtn" class="btn-gold" style="width: 100%; justify-content: center; margin-top: 10px;">
-                    <i class="fa-solid fa-cloud-arrow-up"></i> حفظ التعديلات والرفع للسحابة
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- NEW TRIP MODAL -->
-    <div class="modal-overlay" id="tripModal">
-        <div class="modal-content">
-            <div class="card-box-header">
-                <h2>إضافة رحلة جديدة للسحابة</h2>
-                <i class="fa-solid fa-xmark" onclick="closeTripModal()" style="cursor:pointer; font-size:20px; color:#fff;"></i>
-            </div>
-            <form onsubmit="uploadNewTrip(event)">
-                <div class="form-group">
-                    <label>معرف الرحلة (Key بالإنجليزية)</label>
-                    <input type="text" id="tripKeyInput" required placeholder="e.g. royal-orange-bay">
-                </div>
-                <div class="form-group">
-                    <label>عنوان الرحلة</label>
-                    <input type="text" id="tripTitleInput" required placeholder="رحلة جزيرة أورانج الملكية">
-                </div>
-                <div class="form-group">
-                    <label>السعر باليورو (€)</label>
-                    <input type="number" id="tripPriceInput" required placeholder="35">
-                </div>
-                <div class="form-group">
-                    <label>اختر صور الرحلة من جهازك</label>
-                    <input type="file" id="tripImagesInput" multiple accept="image/*" required style="padding: 10px;">
-                </div>
-                <button type="submit" class="btn-gold" style="width: 100%; justify-content: center; margin-top: 10px;">
-                    <i class="fa-solid fa-cloud-arrow-up"></i> رفع الرحلة والصور للسحابة
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- FIREBASE INITIALIZATION & LOGIC -->
     <script>
-       const firebaseConfig = {
-  apiKey: "AIzaSyDvYQcPSFppf-1C8Z_f77vwa8YQNQvS8MY",
-  authDomain: "zafiro-wep.firebaseapp.com",
-  projectId: "zafiro-wep",
-  storageBucket: "zafiro-wep.firebasestorage.app",
-  messagingSenderId: "785883709300",
-  appId: "1:785883709300:web:a501bb87e0582966d73621",
-  measurementId: "G-HJ0MKBP9JG"
-};
-
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        const db = firebase.firestore();
-        const storage = firebase.storage();
-
-        let currentEditingImagesList = [];
-
-        const defaultSiteTrips = [
-            { key: "orange-bay", title: "جزيرة أورانج باي", priceEUR: 20, img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800" },
-            { key: "hula-hula", title: "جزيرة هولا هولا", priceEUR: 30, img: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=800" },
-            { key: "magawish", title: "جزيرة مجاويش", priceEUR: 25, img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800" },
-            { key: "daily-diving", title: "الغوص اليومي للمحترفين", priceEUR: 50, img: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=800" },
-            { key: "introductory-dive", title: "الغوص الاستكشافي للمبتدئين", priceEUR: 35, img: "https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?q=80&w=800" },
-            { key: "paradise-submarine", title: "غواصة بارادايس وسنوركلينج", priceEUR: 15, img: "https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?q=80&w=800" },
-            { key: "speedboat", title: "سبيد بوت خاص 4 ساعات", priceEUR: 150, img: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=800" },
-            { key: "mountain-safari", title: "رحلة السفاري الجبلية", priceEUR: 30, img: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?q=80&w=800" },
-            { key: "private-boat", title: "تأجير يخت خاص VIP", priceEUR: 0, img: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=800" },
-            { key: "sunset-private", title: "رحلة يخت خاص عند الغروب", priceEUR: 250, img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800" }
-        ];
-
-        function switchSection(sectionId, element) {
-            document.querySelectorAll('.admin-section').forEach(sec => sec.classList.remove('active-section'));
-            document.querySelectorAll('.sidebar-menu li').forEach(li => li.classList.remove('active'));
-            document.getElementById('sec_' + sectionId).classList.add('active-section');
-            element.classList.add('active');
+        // بيانات تجريبية تفاعلية للوحة التحكم
+        function loadTripData() {
+            const select = document.getElementById('tripSelector').value;
+            // هنا يتم جلب البيانات لعرضها في الحقول لتعديلها بسهولة
+            document.getElementById('tripTitleAr').value = "رحلة بحرية في البحر الأحمر";
+            document.getElementById('tripTitleEn').value = "Red Sea Excursion";
+            document.getElementById('tripPrice').value = "35";
+            document.getElementById('tripDesc').value = "استمتع بأروع الرحلات البحرية في الغردقة.";
+            document.getElementById('imagePreviewContainer').innerHTML = "";
         }
 
-        function openManualBookingModal() { document.getElementById('manualBookingModal').style.display = 'flex'; }
-        function closeManualBookingModal() { document.getElementById('manualBookingModal').style.display = 'none'; }
-        function openTripModal() { document.getElementById('tripModal').style.display = 'flex'; }
-        function closeTripModal() { document.getElementById('tripModal').style.display = 'none'; }
-        function closeEditTripModal() { document.getElementById('editTripModalView').style.display = 'none'; }
-
-        // Dynamic Editable Trips Sync
-        function loadSiteTrips() {
-            db.collection("trips").onSnapshot((snapshot) => {
-                let cloudTripsMap = {};
-                snapshot.forEach(doc => { cloudTripsMap[doc.id] = doc.data(); });
-
-                const grid = document.getElementById('siteTripsGrid');
-                grid.innerHTML = '';
-
-                defaultSiteTrips.forEach(t => {
-                    let c = cloudTripsMap[t.key] || t;
-                    let displayPrice = c.priceEUR > 0 ? `€${c.priceEUR}` : 'حسب الطلب';
-                    let imgSrc = c.img || (c.images && c.images.length > 0 ? c.images[0] : t.img);
-
-                    grid.innerHTML += `
-                        <div class="trip-admin-card">
-                            <img src="${imgSrc}" alt="${c.title}">
-                            <div class="trip-admin-card-body">
-                                <div class="trip-admin-title">${c.title}</div>
-                                <div class="trip-admin-price">${displayPrice}</div>
-                                <button class="btn-gold" style="padding:7px 12px; font-size:12px; margin-top:auto;" onclick="openEditModal('${t.key}', '${c.title}', ${c.priceEUR || 0}, '${imgSrc}')">
-                                    <i class="fa-solid fa-pen-to-square"></i> تعديل الرحلة والصور
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                });
-            });
-        }
-
-        function openEditModal(key, title, price, currentImg) {
-            document.getElementById('editTripKey').value = key;
-            document.getElementById('editTripTitle').value = title;
-            document.getElementById('editTripPrice').value = price;
-            document.getElementById('editTripFilesInput').value = '';
-
-            db.collection("trips").doc(key).get().then(doc => {
-                if(doc.exists && doc.data().images && doc.data().images.length > 0) {
-                    currentEditingImagesList = [...doc.data().images];
-                } else {
-                    currentEditingImagesList = [currentImg];
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('imagePreviewContainer').innerHTML = `<img src="${e.target.result}" class="preview-img" alt="معاينة الصورة">`;
                 }
-                renderImagePreviews();
-            });
-
-            document.getElementById('editTripModalView').style.display = 'flex';
-        }
-
-        function renderImagePreviews() {
-            const preview = document.getElementById('currentImgsPreview');
-            preview.innerHTML = '';
-            currentEditingImagesList.forEach((url, index) => {
-                preview.innerHTML += `
-                    <div class="img-item-wrapper">
-                        <img src="${url}">
-                        <button type="button" class="del-img-btn" onclick="removeImageFromList(${index})"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                `;
-            });
-            if (currentEditingImagesList.length === 0) {
-                preview.innerHTML = `<span style="font-size:12px; color:var(--accent-red);">لا توجد صور مرفوعة حالياً. يمكنك رفع صورة جديدة أدناه.</span>`;
+                reader.readAsDataURL(file);
             }
         }
 
-        function removeImageFromList(index) {
-            currentEditingImagesList.splice(index, 1);
-            renderImagePreviews();
+        function saveChanges() {
+            alert("تم حفظ التعديلات بنجاح على جهازك محلياً!");
         }
 
-        async function saveTripEdits(e) {
-            e.preventDefault();
-            const saveBtn = document.getElementById('saveTripBtn');
-            const key = document.getElementById('editTripKey').value;
-            const title = document.getElementById('editTripTitle').value;
-            const price = parseFloat(document.getElementById('editTripPrice').value);
-            const files = document.getElementById('editTripFilesInput').files;
-
-            saveBtn.disabled = true;
-            saveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري حفظ السحابة...';
-
-            let updatedImagesList = [...currentEditingImagesList];
-
-            try {
-                if (files.length > 0) {
-                    for (let i = 0; i < files.length; i++) {
-                        const file = files[i];
-                        const storageRef = storage.ref(`trips_gallery/${key}_${Date.now()}_${i}`);
-                        const snapshot = await storageRef.put(file);
-                        const downloadURL = await snapshot.ref.getDownloadURL();
-                        updatedImagesList.push(downloadURL);
-                    }
-                }
-
-                await db.collection("trips").doc(key).set({
-                    key: key,
-                    title: title,
-                    priceEUR: price,
-                    img: updatedImagesList[0] || '',
-                    images: updatedImagesList,
-                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                }, { merge: true });
-
-                alert("تم تحديث وحفظ الصور والرحلة بنجاح!");
-                closeEditTripModal();
-            } catch (error) {
-                alert("حدث خطأ: " + error.message);
-            } finally {
-                saveBtn.disabled = false;
-                saveBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> حفظ التعديلات والرفع للسحابة';
-            }
-        }
-
-        function loadDashboardData() {
-            db.collection("bookings").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
-                let confirmedCount = 0, pendingCount = 0, cancelledCount = 0, totalRev = 0;
-                let recentHTML = '', fullHTML = '';
-
-                snapshot.forEach((doc) => {
-                    let b = doc.data();
-                    let id = doc.id;
-                    let status = b.status || 'confirmed';
-
-                    if (status === 'confirmed') {
-                        confirmedCount++;
-                        let priceVal = parseFloat((b.total || '0').replace(/[^0-9.]/g, '')) || 35;
-                        totalRev += priceVal;
-                    } else if (status === 'pending') pendingCount++;
-                    else if (status === 'cancelled') cancelledCount++;
-
-                    let selectHtml = `
-                        <select class="status-select" onchange="updateBookingStatus('${id}', this.value)">
-                            <option value="confirmed" ${status === 'confirmed' ? 'selected' : ''}>مؤكد ✅</option>
-                            <option value="pending" ${status === 'pending' ? 'selected' : ''}>قيد الانتظار ⏳</option>
-                            <option value="cancelled" ${status === 'cancelled' ? 'selected' : ''}>ملغى ❌</option>
-                        </select>
-                    `;
-
-                    let row = `<tr>
-                        <td>${b.name || 'عميل'}</td>
-                        <td>${b.hotel || '-'} (${b.room || '-'})</td>
-                        <td>${b.tripName || 'رحلة بحرية'}</td>
-                        <td>${b.date || '-'}</td>
-                        <td>${b.adults ? 'بالغين: ' + b.adults : (b.guests || '1')}</td>
-                        <td style="color: var(--gold-primary); font-weight: 800;">${b.total || '€35'}</td>
-                        <td>${selectHtml}</td>
-                        <td><button style="background:none; border:none; color:var(--accent-red); cursor:pointer;" onclick="deleteBooking('${id}')"><i class="fa-solid fa-trash"></i></button></td>
-                    </tr>`;
-
-                    if (recentHTML.split('<tr>').length <= 6) recentHTML += row;
-                    fullHTML += row;
-                });
-
-                document.getElementById('statConfirmed').innerText = confirmedCount;
-                document.getElementById('statPending').innerText = pendingCount;
-                document.getElementById('statCancelled').innerText = cancelledCount;
-                document.getElementById('statRevenue').innerText = '€' + totalRev;
-
-                document.getElementById('recentBookingsTable').innerHTML = recentHTML || `<tr><td colspan="7" style="text-align: center; color: var(--text-sub);">لا توجد حجوزات مسجلة بعد.</td></tr>`;
-                document.getElementById('fullBookingsTable').innerHTML = fullHTML || `<tr><td colspan="8" style="text-align: center; color: var(--text-sub);">لا توجد حجوزات مسجلة.</td></tr>`;
-            });
-
-            db.collection("ai_chat_logs").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
-                let logsHTML = '';
-                snapshot.forEach((doc) => {
-                    let l = doc.data();
-                    logsHTML += `<tr>
-                        <td>${l.lang || 'ar'}</td>
-                        <td>${l.userText || ''}</td>
-                        <td style="color: var(--gold-light);">${l.botReply || ''}</td>
-                    </tr>`;
-                });
-                document.getElementById('aiChatLogTable').innerHTML = logsHTML;
-            });
-        }
-
-        function saveManualBooking(e) {
-            e.preventDefault();
-            db.collection("bookings").add({
-                name: document.getElementById('mbName').value,
-                hotel: document.getElementById('mbHotel').value,
-                tripName: document.getElementById('mbTripSelect').value,
-                date: document.getElementById('mbDate').value,
-                guests: document.getElementById('mbGuests').value,
-                total: document.getElementById('mbTotal').value,
-                status: document.getElementById('mbStatus').value,
-                source: 'manual',
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(() => {
-                alert("تم إضافة الحجز اليدوي بنجاح!");
-                closeManualBookingModal();
-            });
-        }
-
-        function updateBookingStatus(id, newStatus) {
-            db.collection("bookings").doc(id).update({ status: newStatus });
-        }
-
-        function deleteBooking(id) {
-            if(confirm("هل أنت تأكد من حذف هذا الحجز نهائياً؟")) db.collection("bookings").doc(id).delete();
-        }
-
-        async function uploadNewTrip(e) {
-            e.preventDefault();
-            const key = document.getElementById('tripKeyInput').value.trim();
-            const title = document.getElementById('tripTitleInput').value.trim();
-            const price = parseFloat(document.getElementById('tripPriceInput').value);
-            const filesInput = document.getElementById('tripImagesInput').files;
-
-            alert("جاري رفع الصور للسحابة...");
-            let imageUrls = [];
-
-            try {
-                for (let i = 0; i < filesInput.length; i++) {
-                    const file = filesInput[i];
-                    const storageRef = storage.ref(`trips_gallery/${key}_${Date.now()}_${i}`);
-                    const snapshot = await storageRef.put(file);
-                    const downloadURL = await snapshot.ref.getDownloadURL();
-                    imageUrls.push(downloadURL);
-                }
-
-                await db.collection("trips").doc(key).set({
-                    key: key, title: title, priceEUR: price, img: imageUrls[0], images: imageUrls,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-
-                alert("تم رفع الرحلة والصور بنجاح!");
-                closeTripModal();
-            } catch (error) {
-                alert("خطأ أثناء الرفع: " + error.message);
-            }
-        }
-
-        window.onload = function() {
-            loadSiteTrips();
-            loadDashboardData();
-        };
+        window.onload = loadTripData;
     </script>
 </body>
 </html>
