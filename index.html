@@ -380,34 +380,6 @@
         }
         .submit-booking-btn:hover { background: #1ebc57; transform: translateY(-2px); }
 
-        /* HELP BUTTON & CONVERSATIONAL AI CHAT */
-        .help-pill-btn {
-            position: fixed; bottom: 20px; right: 20px; background: var(--gold-gradient); color: #02070e;
-            padding: 12px 22px; border-radius: 50px; display: flex; align-items: center; gap: 8px;
-            font-size: 14px; font-weight: 900; box-shadow: 0 10px 25px rgba(212, 175, 55, 0.5); cursor: pointer; z-index: 1500;
-        }
-        .help-pill-btn:hover { transform: translateY(-3px) scale(1.03); }
-
-        .ai-chat-window {
-            position: fixed; bottom: 85px; right: 15px; width: 360px; max-width: 92vw; height: 480px;
-            background: #06111e; border: 1.5px solid var(--glass-border); border-radius: 22px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.9); display: none; flex-direction: column; overflow: hidden; z-index: 1500;
-            backdrop-filter: blur(20px);
-        }
-
-        .ai-chat-header { background: rgba(255, 255, 255, 0.04); padding: 15px 18px; border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: space-between; }
-        .ai-chat-header h4 { font-size: 14.5px; color: var(--gold-light); display: flex; align-items: center; gap: 8px; font-weight: 800; }
-
-        .ai-chat-body { flex-grow: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-
-        .chat-msg { max-width: 88%; padding: 10px 14px; border-radius: 14px; font-size: 13px; line-height: 1.5; }
-        .chat-msg.bot { background: rgba(212, 175, 55, 0.09); border: 1px solid var(--glass-border); color: #f8fafc; align-self: flex-start; }
-        .chat-msg.user { background: var(--gold-gradient); color: #02070e; font-weight: 700; align-self: flex-end; }
-
-        .ai-chat-footer { padding: 10px 14px; border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; gap: 8px; }
-        .ai-chat-footer input { flex-grow: 1; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.14); padding: 10px 12px; border-radius: 10px; color: #fff; outline: none; font-size: 12.5px; }
-        .ai-chat-footer button { background: var(--gold-gradient); border: none; padding: 0 14px; border-radius: 10px; color: #02070e; cursor: pointer; font-weight: 800; }
-
         /* PREMIUM FOOTER DESIGN */
         footer.site-footer-premium {
             background: var(--footer-bg); color: #f8fafc; padding: 60px 5% 30px;
@@ -751,11 +723,11 @@
                             <input type="number" id="cntAdults" value="1" min="1" onchange="calculateTotal()">
                         </div>
                         <div class="counter-box">
-                            <label id="lblKids10">Kids > 10 yrs (50%)</label>
+                            <label id="lblKids10">Children (5-10 yrs) (50%)</label>
                             <input type="number" id="cntKids10" value="0" min="0" onchange="calculateTotal()">
                         </div>
                         <div class="counter-box">
-                            <label id="lblKidsFree">Kids < 10 yrs (FREE)</label>
+                            <label id="lblKidsFree">Kids < 5 yrs (FREE)</label>
                             <input type="number" id="cntKidsFree" value="0" min="0" onchange="calculateTotal()">
                         </div>
                     </div>
@@ -779,28 +751,6 @@
         <button class="lightbox-nav lightbox-prev" onclick="navigateLightbox(1)">&#10095;</button>
         <img id="lightboxImg" class="lightbox-content" src="" alt="Zoomed Trip Photo">
         <button class="lightbox-nav lightbox-next" onclick="navigateLightbox(-1)">&#10094;</button>
-    </div>
-
-    <!-- ELEGANT "HELP" FLOATING BUTTON -->
-    <div class="help-pill-btn" onclick="toggleAIChat()">
-        <i class="fa-solid fa-headset"></i> <span id="aiHelpBtnText">Help 💬</span>
-    </div>
-
-    <!-- CONVERSATIONAL MULTILINGUAL AI ASSISTANT CHAT WINDOW -->
-    <div class="ai-chat-window" id="aiChatWindow">
-        <div class="ai-chat-header">
-            <h4><i class="fa-solid fa-sparkles"></i> ZAFIRO Sea Concierge</h4>
-            <i class="fa-solid fa-xmark" onclick="toggleAIChat()" style="cursor:pointer; color:#fff; font-size: 18px;"></i>
-        </div>
-        <div class="ai-chat-body" id="aiChatBody">
-            <div class="chat-msg bot" id="aiChatWelcome">
-                👋 Hello! Welcome to ZAFIRO SEA. I am your personal concierge assistant. How can I help you today?
-            </div>
-        </div>
-        <div class="ai-chat-footer">
-            <input type="text" id="aiInput" placeholder="Type your message..." onkeypress="handleAIPress(event)">
-            <button onclick="sendAIMessage()"><i class="fa-solid fa-paper-plane"></i></button>
-        </div>
     </div>
 
     <!-- PREMIUM FOOTER SECTION -->
@@ -882,7 +832,6 @@
                 fullName: "Full Name", hotelName: "Hotel Name", roomNum: "Room Number", date: "Excursion Date",
                 guests: "Guests Breakdown", adults: "Adults", kids10: "Kids > 10 yrs (50%)", kidsFree: "Kids < 10 yrs (FREE)",
                 totalEst: "Total Estimated Price:", confirmWA: "Confirm Booking on WhatsApp",
-                aiWelcome: "👋 Hello! Welcome to ZAFIRO SEA. I am your personal concierge assistant. How can I help you today?", aiPlaceholder: "Type your message...",
                 abBadge: "DISCOVER OUR STORY", abTitle: "About Zafiro Sea", abHead: "About Zafiro Sea Tourism Company",
                 abP1: "Zafiro Sea Tourism Company is a premier travel and tourism company based in Hurghada, Egypt, dedicated to creating unforgettable experiences across the breathtaking Red Sea. Our passion is to connect travelers with the natural beauty, vibrant marine life, and rich culture that make Hurghada one of the world's most popular holiday destinations[cite: 1].",
                 abP2: "We specialize in organizing high-quality sea excursions, snorkeling and diving adventures, private yacht charters, island trips, desert safaris, cultural excursions, airport transfers, and customized holiday packages.",
@@ -913,7 +862,6 @@
                 fullName: "الاسم الكامل", hotelName: "اسم الفندق", roomNum: "رقم الغرفة", date: "تاريخ الرحلة",
                 guests: "تفاصيل الأفراد", adults: "البالغين", kids10: "أطفال أكبر من 10 سنوات (50%)", kidsFree: "أطفال أقل من 10 سنوات (مجاناً)",
                 totalEst: "السعر الإجمالي التقديري:", confirmWA: "تأكيد الحجز عبر الواتساب",
-                aiWelcome: "👋 أهلاً بك في ZAFIRO SEA! أنا مساعدك الشخصي. أقدر أساعدك في إيه النهاردة؟", aiPlaceholder: "اكتب رسالتك...",
                 abBadge: "اكتشف قصتنا", abTitle: "عن زافيرو سي", abHead: "عن شركة زافيرو سي للسياحة",
                 abP1: "شركة زافيرو سي للسياحة هي شركة رائدة في مجال الرحلات والتوريزم بمحافظة البحر الأحمر والغردقة، متخصصة في تقديم تجارب استثنائية لا تُنسى في أعماق البحر الأحمر. شغفنا هو ربط زوارنا بطبيعة الغردقة الساحرة وشعابها المرجانية الحية[cite: 1].",
                 abP2: "نحن متخصصون في تنظيم الرحلات البحرية عالية الجودة، رحلات السنوركلينج والغوص، تأجير اليخوت الخاصة، زيارة الجزر، السفاري الصحراوي، ورحلات اليوم الواحد إلى الأقصر والقاهرة مع توفير انتقالات المطار والبرامج المخصصة.",
@@ -944,7 +892,6 @@
                 fullName: "Vollständiger Name", hotelName: "Hotelname", roomNum: "Zimmernummer", date: "Ausflugsdatum",
                 guests: "Gästeübersicht", adults: "Erwachsene", kids10: "Kinder > 10 J. (50%)", kidsFree: "Kinder < 10 J. (GRATIS)",
                 totalEst: "Gesamter geschätzter Preis:", confirmWA: "Buchung über WhatsApp bestätigen",
-                aiWelcome: "👋 Hallo! Willkommen bei ZAFIRO SEA. Wie kann ich Ihnen heute helfen?", aiPlaceholder: "Nachricht schreiben...",
                 abBadge: "UNSERE GESCHICHTE", abTitle: "Über Zafiro Sea", abHead: "Über Zafiro Sea Tourismus",
                 abP1: "Zafiro Sea Tourism ist ein führendes Reiseunternehmen in Hurghada, Ägypten, das unvergessliche Erlebnisse im Roten Meer schafft[cite: 1].",
                 abP2: "Wir sind spezialisiert auf hochwertige Seereisen, Schnorcheln, Tauchen, private Yachtcharter, Wüstensafaris und Flughafentransfers.",
@@ -972,7 +919,6 @@
                 fullName: "Nome e Cognome", hotelName: "Nome dell'Hotel", roomNum: "Numero Camera", date: "Data dell'Escursione",
                 guests: "Dettaglio Ospiti", adults: "Adulti", kids10: "Bambini > 10 anni (50%)", kidsFree: "Bambini < 10 anni (GRATIS)",
                 totalEst: "Prezzo Totale Stimato:", confirmWA: "Conferma Prenotazione su WhatsApp",
-                aiWelcome: "👋 Ciao! Benvenuto in ZAFIRO SEA. Come posso aiutarti oggi?", aiPlaceholder: "Scrivi un messaggio...",
                 abBadge: "LA NOSTRA STORIA", abTitle: "Chi Siamo", abHead: "A proposito di Zafiro Sea",
                 abP1: "Zafiro Sea Tourism è un'azienda leader a Hurghada, Egitto, dedicata a creare esperienze indimenticabili nel Mar Rosso[cite: 1].",
                 abP2: "Siamo specializzati in gite in barca, snorkeling, immersioni, yacht privati e safari nel deserto.",
@@ -1000,7 +946,6 @@
                 fullName: "Полное имя", hotelName: "Название отеля", roomNum: "Номер комнаты", date: "Дата экскурсии",
                 guests: "Количество гостей", adults: "Взрослые", kids10: "Дети > 10 лет (50%)", kidsFree: "Дети < 10 лет (БЕСПЛАТНО)",
                 totalEst: "Итоговая ориентировочная цена:", confirmWA: "Подтвердить бронирование в WhatsApp",
-                aiWelcome: "👋 Здравствуйте! Добро пожаловать в ZAFIRO SEA. Я ваш персональный консьерж. Чем я могу вам помочь сегодня?", aiPlaceholder: "Введите сообщение...",
                 abBadge: "УЗНАЙТЕ НАШУ ИСТОРИЮ", abTitle: "О компании Zafiro Sea", abHead: "О туристической компании Zafiro Sea",
                 abP1: "Туристическая компания Zafiro Sea базируется в Хургаде, Египет, и стремится создавать незабываемые впечатления на прекрасном Красном море. Наша страсть — знакомить путешественников с природной красотой, яркой морской фауной и богатой культурой Хургады[cite: 1].",
                 abP2: "Мы специализируемся на организации высококачественных морских экскурсий, поездок с снорклингом и дайвингом, чартеров частных яхт, туров по островам, сафари по пустыне, культурных экскурсий, трансферов из аэропорта и индивидуальных пакетов отдыха.",
@@ -1832,7 +1777,7 @@
                         'الاستقبال الفاخر VIP: نقل مميز من الفندق للمارينا واستلام معدات سنوركلينج فائقة الجودة.',
                         'الإبحار النخبة: جولة في البحر الأحمر مع مشروبات ترحيبية منعشة.',
                         'البحث عن الدلافين: الإبحار في المياه المفتوحة بحثاً عن الدلافين البرية في بيئتها الطبيعية.',
-                        'عظمة الجزيرة: الاسترخاء على الرمال البيضاء النقية لأورانج باي والاستمتاع بأراجيح المياه الشهيرة.',
+                        'عظمة الجزيرة: الاسترخاء على الرمال البيضاء النقية لأورانج باي والاستمتاع أراجيح المياه الشهيرة.',
                         'الغداء الفاخر: بوفيه طازج مميز يُعد على متن اليخت بواسطة طاهينا المحترف.',
                         'وقفة السنوركلينج الأولى: الغوص في حدائق الشعاب المرجانية النابضة بالحياة مع مرشدين.',
                         'وقفة السنوركلينج الثانية: استكشاف موقع شعاب مرجانية صافٍ آخر لمناظر جديدة.',
@@ -2293,8 +2238,6 @@
             document.getElementById('footerToursHead').innerText = t.all;
             document.getElementById('footerContactHead').innerText = t.contactText;
             document.getElementById('ftHours').innerText = t.ctHoursText;
-            document.getElementById('aiChatWelcome').innerText = t.aiWelcome;
-            document.getElementById('aiInput').placeholder = t.aiPlaceholder;
 
             renderTrips();
         }
@@ -2383,9 +2326,26 @@
             const date = document.getElementById('custDate').value;
             const adults = document.getElementById('cntAdults').value;
             const kids10 = document.getElementById('cntKids10').value;
+            const kidsFree = document.getElementById('cntKidsFree').value;
             const total = document.getElementById('calculatedTotal').innerText;
 
-            const rawMessage = `ZAFIRO SEA | VIP Reservation\nName: ${name}\nHotel: ${hotel}\nRoom: ${room || 'N/A'}\nDate: ${date}\nTrip: ${currentTripName}\nAdults: ${adults}, Kids: ${kids10}\nTotal: ${total}`;
+           const rawMessage = `*| ZAFIRO SEA | EXCURSION INVOICE |*\n` +
+                   `----------------------------------------\n` +
+                   `*Guest Name:* ${name}\n` +
+                   `*Hotel Resort:* ${hotel}\n` +
+                   `*Room Number:* ${room || 'N/A'}\n` +
+                   `*Trip Date:* ${date}\n` +
+                   `*Excursion:* ${currentTripName}\n` +
+                   `----------------------------------------\n` +
+                   `*GUESTS BREAKDOWN:*\n` +
+                   `   - Adults: ${adults}\n` +
+                   `   - Children (5-10 yrs) [50%]: ${kids10}\n` +
+                   `   - Kids < 5 yrs [FREE]: ${kidsFree}\n` +
+                   `----------------------------------------\n` +
+                   `*TOTAL ESTIMATED: ${total}*\n` +
+                   `----------------------------------------\n` +
+                   `*Thank you for choosing Zafiro Sea!*\n` +
+                   `*Your gateway to Red Sea luxury.*`;
             window.open(`https://wa.me/${officialWhatsAppNumber}?text=${encodeURIComponent(rawMessage)}`, '_blank');
             closeBookingModal();
         }
@@ -2400,52 +2360,6 @@
 
             const rawMessage = `ZAFIRO SEA | Direct Website Inquiry\nName: ${name}\nPhone: ${phone}\nEmail: ${email || 'N/A'}\nSubject: ${subject || 'General Inquiry'}\nMessage:\n${msg}`;
             window.open(`https://wa.me/${officialWhatsAppNumber}?text=${encodeURIComponent(rawMessage)}`, '_blank');
-        }
-
-        function toggleAIChat() {
-            const win = document.getElementById('aiChatWindow');
-            win.style.display = (win.style.display === 'flex') ? 'none' : 'flex';
-        }
-
-        function handleAIPress(e) {
-            if(e.key === 'Enter') sendAIMessage();
-        }
-
-        function sendAIMessage() {
-            const input = document.getElementById('aiInput');
-            const text = input.value.trim();
-            if(!text) return;
-            input.value = '';
-
-            const body = document.getElementById('aiChatBody');
-            body.innerHTML += `<div class="chat-msg user">${text}</div>`;
-            body.scrollTop = body.scrollHeight;
-
-            setTimeout(() => {
-                const lower = text.toLowerCase();
-                let botReply = "";
-                const isArabicText = /[\u0600-\u06FF]/.test(text);
-
-                if (lower === 'hello' || lower === 'hi' || lower === 'hey' || lower.includes('أهلا') || lower.includes('مرحبا') || lower.includes('السلام عليكم') || lower.includes('hallo')) {
-                    if (isArabicText || currentLang === 'ar') {
-                        botReply = "أهلاً بك! كيف يمكنني مساعدتك اليوم؟ يمكنك الاستفسار عن رحلات البحر الأحمر، الغوص، الجزر، أو الأسعار.";
-                    } else if (currentLang === 'ru') {
-                        botReply = "Здравствуйте! Чем я могу помочь вам сегодня? Вы можете узнать о наших экскурсиях по Красному морю.";
-                    } else {
-                        botReply = "Hello! How can I assist you today? Feel free to ask about our Red Sea excursions, island tours, diving, or prices.";
-                    }
-                } else {
-                    if (currentLang === 'ru') {
-                        botReply = "Спасибо за обращение! Я здесь, чтобы помочь вам выбрать лучший отдых в Хургаде.";
-                    } else {
-                        botReply = "Thank you for reaching out! I'm here to help you find the best Red Sea experience in Hurghada.";
-                    }
-                }
-
-                let botMsgHtml = `<div class="chat-msg bot">${botReply}</div>`;
-                body.innerHTML += botMsgHtml;
-                body.scrollTop = body.scrollHeight;
-            }, 500);
         }
 
         window.onload = function() {
