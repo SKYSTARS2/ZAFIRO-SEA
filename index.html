@@ -185,12 +185,21 @@
         }
         .trip-includes li i { color: var(--gold-primary); font-size: 12px; }
 
-        .trip-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+        .trip-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.08); flex-wrap: wrap; gap: 10px; }
         .price-amount { font-size: 22px; font-weight: 900; color: var(--gold-primary); }
 
+        .trip-card-actions { display: flex; align-items: center; gap: 8px; }
+
+        .details-btn {
+            background: rgba(212, 175, 55, 0.1); color: var(--gold-light); border: 1px solid var(--glass-border);
+            padding: 10px 12px; border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 12px;
+            display: flex; align-items: center; gap: 5px; z-index: 2;
+        }
+        .details-btn:hover { background: rgba(212, 175, 55, 0.25); border-color: var(--gold-primary); }
+
         .book-btn {
-            background: var(--gold-gradient); color: #02070e; padding: 10px 18px; border-radius: 10px;
-            border: none; cursor: pointer; font-weight: 800; font-size: 13px; display: flex; align-items: center; gap: 6px;
+            background: var(--gold-gradient); color: #02070e; padding: 10px 16px; border-radius: 10px;
+            border: none; cursor: pointer; font-weight: 800; font-size: 12.5px; display: flex; align-items: center; gap: 5px;
             z-index: 2;
         }
         .book-btn:hover { box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); transform: scale(1.02); }
@@ -869,7 +878,7 @@
                 desc: "Private speedboats, pristine island escapes, luxury diving, and tailor-made VIP yacht charters on the crystalline waters of the Red Sea.",
                 trust1: "Guaranteed Quality & Safety", trust2: "Personalized Concierge Service", trust3: "Direct Instant Booking",
                 all: "All Trips", islands: "Island Tours", speedboat: "Speedboats", diving: "Diving & Snorkeling", safari: "Desert Safari",
-                bookNow: "Book Now", prog: "Program Highlights", inc: "Inclusions & Menu", proceed: "Proceed to Quick Booking Now",
+                bookNow: "Book Now", detailsBtn: "Trip Details", prog: "Program Highlights", inc: "Inclusions & Menu", proceed: "Proceed to Quick Booking Now",
                 fullName: "Full Name", hotelName: "Hotel Name", roomNum: "Room Number", date: "Excursion Date",
                 guests: "Guests Breakdown", adults: "Adults", kids10: "Kids > 10 yrs (50%)", kidsFree: "Kids < 10 yrs (FREE)",
                 totalEst: "Total Estimated Price:", confirmWA: "Confirm Booking on WhatsApp",
@@ -900,7 +909,7 @@
                 desc: "سبيد بوت خاص، جزر خلابة، غوص فاخر، ويخوت VIP مجهزة خصيصاً لرحلات استثنائية في مياه البحر الأحمر الساحرة.",
                 trust1: "جودة وأمان مضمون بالكامل", trust2: "خدمة عملاء وكونسيرج شخصية", trust3: "حجز مباشر وفوري",
                 all: "كل الرحلات", islands: "جزر البحر الأحمر", speedboat: "السبيد بوت", diving: "الغوص والسنوركلينج", safari: "سفاري الصحراء",
-                bookNow: "احجز الآن", prog: "برنامج الرحلة", inc: "المحتويات والمنيو", proceed: "الانتقال للحجز السريع",
+                bookNow: "احجز الآن", detailsBtn: "تفاصيل الحجز", prog: "برنامج الرحلة", inc: "المحتويات والمنيو", proceed: "الانتقال للحجز السريع",
                 fullName: "الاسم الكامل", hotelName: "اسم الفندق", roomNum: "رقم الغرفة", date: "تاريخ الرحلة",
                 guests: "تفاصيل الأفراد", adults: "البالغين", kids10: "أطفال أكبر من 10 سنوات (50%)", kidsFree: "أطفال أقل من 10 سنوات (مجاناً)",
                 totalEst: "السعر الإجمالي التقديري:", confirmWA: "تأكيد الحجز عبر الواتساب",
@@ -931,7 +940,7 @@
                 desc: "Private Schnellboote, unberührte Inselausflüge, Luxustauchen und maßgeschneiderte VIP-Yachtcharter auf dem Roten Meer.",
                 trust1: "Garantierte Qualität & Sicherheit", trust2: "Persönlicher Concierge-Service", trust3: "Direkte Sofortbuchung",
                 all: "Alle Ausflüge", islands: "Inseltouren", speedboat: "Schnellboote", diving: "Tauchen & Schnorcheln", safari: "Wüstensafari",
-                bookNow: "Buchen", prog: "Programm-Highlights", inc: "Inklusive & Menü", proceed: "Zur Schnellbuchung",
+                bookNow: "Buchen", detailsBtn: "Details", prog: "Programm-Highlights", inc: "Inklusive & Menü", proceed: "Zur Schnellbuchung",
                 fullName: "Vollständiger Name", hotelName: "Hotelname", roomNum: "Zimmernummer", date: "Ausflugsdatum",
                 guests: "Gästeübersicht", adults: "Erwachsene", kids10: "Kinder > 10 J. (50%)", kidsFree: "Kinder < 10 J. (GRATIS)",
                 totalEst: "Gesamter geschätzter Preis:", confirmWA: "Buchung über WhatsApp bestätigen",
@@ -959,7 +968,7 @@
                 desc: "Motoscafo privato, isole incontaminate, immersioni di lusso e charter yacht VIP su misura nel Mar Rosso.",
                 trust1: "Qualità e Sicurezza Garantite", trust2: "Servizio Concierge Personalizzato", trust3: "Prenotazione Immediata",
                 all: "Tutti i Tour", islands: "Tour delle Isole", speedboat: "Moscafi", diving: "Immersioni & Snorkel", safari: "Safari nel Deserto",
-                bookNow: "Prenota", prog: "Punti Salienti", inc: "Inclusioni e Menu", proceed: "Procedi alla Prenotazione",
+                bookNow: "Prenota", detailsBtn: "Dettagli", prog: "Punti Salienti", inc: "Inclusioni e Menu", proceed: "Procedi alla Prenotazione",
                 fullName: "Nome e Cognome", hotelName: "Nome dell'Hotel", roomNum: "Numero Camera", date: "Data dell'Escursione",
                 guests: "Dettaglio Ospiti", adults: "Adulti", kids10: "Bambini > 10 anni (50%)", kidsFree: "Bambini < 10 anni (GRATIS)",
                 totalEst: "Prezzo Totale Stimato:", confirmWA: "Conferma Prenotazione su WhatsApp",
@@ -987,7 +996,7 @@
                 desc: "Частные скоростные катера, райские острова, элитный дайвинг и VIP яхты на бирюзовых водах Красного моря.",
                 trust1: "Гарантия качества и безопасности", trust2: "Персональный консьерж-сервис", trust3: "Мгновенное бронирование",
                 all: "Все туры", islands: "Острова", speedboat: "Катера", diving: "Дайвинг и Снорклинг", safari: "Сафари",
-                bookNow: "Забронировать", prog: "Программа тура", inc: "Включено в стоимость", proceed: "Перейти к быстрому бронированию",
+                bookNow: "Забронировать", detailsBtn: "Детали тура", prog: "Программа тура", inc: "Включено в стоимость", proceed: "Перейти к быстрому бронированию",
                 fullName: "Полное имя", hotelName: "Название отеля", roomNum: "Номер комнаты", date: "Дата экскурсии",
                 guests: "Количество гостей", adults: "Взрослые", kids10: "Дети > 10 лет (50%)", kidsFree: "Дети < 10 лет (БЕСПЛАТНО)",
                 totalEst: "Итоговая ориентировочная цена:", confirmWA: "Подтвердить бронирование в WhatsApp",
@@ -1686,7 +1695,7 @@
                         'العودة السلسة: الوصول للمارينا وعودة خاصة مريحة إلى الفندق.'
                     ],
                     includes: [
-                        'لا تتطلب رخصة غوص أو خبرة سابقة في السباحة — مدربك المحترف سيبقى معك طوال الوقت.',
+                        'لا تتطلب رخصة غوص أو خبرة سابقة في السباحة — مدربك المحترف سييبقى معك طوال الوقت.',
                         'معدات غوص كاملة وبدلات غوص معقمة متضمنة مجاناً.',
                         'دجاج مشوي متبل وكفتة لذيذة مشوية على الفحم.',
                         'بطاطس فرن ومكرونة طازجة بصلصة الشيف الخاصة.',
@@ -1758,7 +1767,7 @@
             'orange-bay': {
                 category: 'islands', priceEUR: 20,
                 images: [
-                     'images/p2.jpg',
+                    'images/p2.jpg',
                     'images/p3.jpg',
                     'images/p4.jpg',
                     'images/p5.jpg',
@@ -2148,9 +2157,14 @@
                             <ul class="trip-includes">${includesHtml}</ul>
                             <div class="trip-footer">
                                 <div class="price-amount">${getConvertedPrice(tripObj.priceEUR)}</div>
-                                <button class="book-btn" onclick="event.stopPropagation(); openBookingModal('${key}', ${tripObj.priceEUR})">
-                                    <i class="fa-brands fa-whatsapp"></i> ${t.bookNow}
-                                </button>
+                                <div class="trip-card-actions">
+                                    <button class="details-btn" onclick="event.stopPropagation(); openDetailModal('${key}')">
+                                        <i class="fa-solid fa-circle-info"></i> ${t.detailsBtn}
+                                    </button>
+                                    <button class="book-btn" onclick="event.stopPropagation(); openBookingModal('${key}', ${tripObj.priceEUR})">
+                                        <i class="fa-brands fa-whatsapp"></i> ${t.bookNow}
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -2261,7 +2275,6 @@
             document.getElementById('dtTitle').innerText = trip.title;
             document.getElementById('dtPrice').innerText = tripObj.priceEUR > 0 ? `${getConvertedPrice(tripObj.priceEUR)}` : (currentLang === 'ar' ? 'حسب الطلب' : (currentLang === 'ru' ? 'По запросу' : 'Custom Price / VIP Charter'));
             
-            // Dynamic multi-images rendering in detail modal
             const mainViewImg = document.getElementById('dtMainViewImg');
             const thumbsGrid = document.getElementById('dtThumbsGrid');
             
@@ -2295,7 +2308,6 @@
         }
 
         let lightboxImagesReference = [];
-        // Override openLightbox to keep track of current trip's images array
         const originalOpenLightbox = openLightbox;
         openLightbox = function(imgArray, index) {
             lightboxImagesReference = imgArray;
@@ -2311,8 +2323,13 @@
 
             document.getElementById('modalTripTitle').innerText = `${translations[currentLang].bookNow}: ${tripName}`;
             document.getElementById('bookingModal').classList.add('active');
+            
+            const todayStr = new Date().toISOString().split('T')[0];
+            const dateInput = document.getElementById('custDate');
+            dateInput.min = todayStr;
             const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
-            document.getElementById('custDate').value = tomorrow.toISOString().split('T')[0];
+            dateInput.value = tomorrow.toISOString().split('T')[0];
+
             calculateTotal();
         }
 
